@@ -8,3 +8,5 @@ file structure :
 main db structure : 
 	id | username | originLink | shortLink | viewCounter | lastView | status
 
+analyze db structure : 
+	id | shortLink | date | viewCounter
