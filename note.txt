@@ -3,3 +3,8 @@ file structure :
     templates/
     db/
     moduls/ -> dbcontroller.py , logger.py(sqlite3) , loginValidation , expireChecker(for link expire checker)
+
+
+main db structure : 
+	id | username | originLink | shortLink | viewCounter | lastView | status
+
