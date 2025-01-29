@@ -1,0 +1,5 @@
+file structure : 
+    app.py
+    templates/
+    db/
+    moduls/ -> dbcontroller.py , logger.py(sqlite3) , loginValidation , expireChecker(for link expire checker)
