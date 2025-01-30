@@ -100,6 +100,28 @@ def signup():
 
 
 
+#main page api
+@app.route("/policy" , methods = ["GET"])
+def policy() : 
+    return render_template("policy.html")
+
+
+@app.route("/about" , methods = ["GET"])
+def about() : 
+    return render_template("about.html")
+
+
+@app.route("/contactus" , methods = ["GET"])
+def contactus() : 
+    return render_template("contactus.html")
+
+
+
+
+
+
+
+
 
 
 
