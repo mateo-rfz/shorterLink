@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen w-full overflow-x-hidden">
+    <!-- Header -->
+    <header class="flex flex-wrap justify-between items-center p-5 bg-gray-800 text-white w-full">
+        <h1 class="text-3xl sm:text-4xl font-bold">Shorter Link</h1>
+        <nav class="flex space-x-4">
+            <a href="{{ url_for('main') }}" class="hover:text-gray-400">Home</a>
+            <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
+            <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="flex-1 p-10 text-center sm:text-left max-w-4xl mx-auto">
+        <h2 class="text-3xl font-semibold">Privacy Policy</h2>
+        <h2 class="text-2xl font-semibold mb-4">1. Information We Collect</h2>
+        <p>We may collect the following types of data when you use our service:</p>
+        <ul class="list-disc pl-6">
+            <li><strong>Personal Information</strong>: Such as your name, email address, and account details when you sign up.</li>
+            <li><strong>Usage Data</strong>: Including IP address, browser type, and access times to enhance user experience.</li>
+            <li><strong>Shortened Links Data</strong>: The URLs you shorten and analytics related to their usage.</li>
+        </ul>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">2. How We Use Your Information</h2>
+        <p>We use your information to:</p>
+        <ul class="list-disc pl-6">
+            <li>Provide and improve our URL shortening service.</li>
+            <li>Monitor and analyze usage patterns to enhance security and functionality.</li>
+            <li>Communicate with you about updates, security alerts, or support requests.</li>
+        </ul>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">3. Data Sharing and Security</h2>
+        <p>We do not sell, trade, or rent your personal information. Your data is stored securely and protected against unauthorized access. However, we may disclose your data:</p>
+        <ul class="list-disc pl-6">
+            <li>If required by law or to comply with legal processes.</li>
+            <li>To prevent fraud, security threats, or violations of our Terms of Service.</li>
+        </ul>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">4. Cookies and Tracking Technologies</h2>
+        <p>We use cookies to:</p>
+        <ul class="list-disc pl-6">
+            <li>Enhance user experience and store preferences.</li>
+            <li>Collect analytics data to optimize our service.</li>
+        </ul>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">5. Third-Party Services</h2>
+        <p>We do not use any third-party services (e.g., analytics providers) in our platform. All data collected is used solely to improve our service, and no information is shared with any third parties.</p>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">6. Your Rights and Choices</h2>
+        <p>You have the right to:</p>
+        <ul class="list-disc pl-6">
+            <li>Access, update, or delete your personal information.</li>
+            <li>Opt-out of promotional communications.</li>
+            <li>Request data portability or restriction of processing.</li>
+        </ul>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">7. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy periodically. Any changes will be reflected on this page.</p>
+    
+        <h2 class="text-2xl font-semibold mt-6 mb-4">8. Limitations on Use</h2>
+        <p>Our service is designed solely for lawful and appropriate use. You agree not to use our service for the following purposes:</p>
+        <ul class="list-disc pl-6">
+            <li>Posting or sharing links that contain illegal, offensive, harmful, hateful, or threatening content.</li>
+            <li>Using the service to distribute malware, viruses, or any other harmful software.</li>
+            <li>Violating the intellectual property rights of others.</li>
+            <li>Engaging in any activity that disrupts the functionality of our service or servers.</li>
+        </ul>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 text-white space-y-4 sm:space-y-0 text-center sm:text-left relative w-full overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+            <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
+            <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
+            <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+            <a href="https://github.com/mateo-rfz/shorterlink" class="hover:text-gray-400">GitHub</a>
+        </div>
+        <div class="w-full text-center text-sm font-light mt-8 sm:mt-0 sm:absolute sm:bottom-2">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
+    </footer>
+</body>
+</html>
