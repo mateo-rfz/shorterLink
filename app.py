@@ -9,7 +9,7 @@ app = Flask(__name__)
  
 
 @app.route("/", methods=["GET", "POST"])
-def mainPage():
+def main():
     links_created = 123 
     views = 4567 
     users = 89 
@@ -126,4 +126,4 @@ def contactus() :
 
 
 if (__name__) == ("__main__") : 
-    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80 , debug=True)
+    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80 , debug=False)
