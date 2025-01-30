@@ -8,10 +8,14 @@ app = Flask(__name__)
  
  
 
+@app.route("/", methods=["GET", "POST"])
+def mainPage():
+    links_created = 123 
+    views = 4567 
+    users = 89 
 
-@app.route("/" , methods = ["GET" , "POST"])
-def mainPage() : 
-    return render_template("main.html")
+    return render_template("main.html", linksCreated=links_created, view=views, users=users)
+
 
 
 
@@ -77,8 +81,8 @@ def login() :
 
 
 
-@app.route("/signUp" , methods = ["GET" , "POST"])
-def signUp():
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
     if request.method == "POST" : 
         return render_template("signup.html")
     else : 
@@ -100,4 +104,4 @@ def signUp():
 
 
 if (__name__) == ("__main__") : 
-    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80)
+    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80 , debug=True)
