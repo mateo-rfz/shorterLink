@@ -3,6 +3,10 @@ from flask import Flask , render_template , request , redirect , url_for
 #import socket for find local ip
 import socket
 
+from modules import dbController
+
+from modules import shortLinkCreator
+
 
 app = Flask(__name__)
  
@@ -23,23 +27,15 @@ def main():
 
 
 
-
 @app.route("/<string:shortLink>" , methods = ["GET" , "POST"])
 def redirectPage(shortLink) : 
-        pass #return the original link
+    origin = dbController.urlFinder(shortLink)
 
-
-
-
-
-
-
-
-
-
-@app.route("/home" , methods = ["GET" , "POST"])
-def home() : 
-    return "hello from home route"
+    if origin :
+        return redirect(list(origin)[2])
+    else : 
+        return render_template("notice.html" ,title = "Wrong page" , text = "we cant find this page on database") 
+        
 
 
 
@@ -51,7 +47,16 @@ def home() :
 
 @app.route("/createLink" , methods = ["GET" , "POST"])
 def createLink() : 
-    return "hello from createLink route"
+    if request.method == "GET" : 
+        return render_template("createLink.html")
+    else : 
+        username = request.form.get("username")
+        originLink = request.form.get("originLink")
+        shortLink =  shortLinkCreator.createShortLink()
+
+        dbController.createShortUrl(username , originLink , shortLink)
+
+        return render_template("link.html" , title = "Success" , domain = socket.gethostbyname(socket.gethostname()) , shortLink = shortLink)
 
 
 
@@ -62,17 +67,7 @@ def createLink() :
 
 @app.route("/login" , methods = ["GET" , "POST"])
 def login() : 
-    if request.method == "GET" : 
-        return render_template("login.html")
-    else : 
-        username = request.form.get("username")
-        password = request.form.get("password")
-        
-
-        if username and password : #check login validation
-            return redirect(url_for("home"))
-        else : 
-            return render_template("login.html")
+    return render_template("notice.html" , title = "Wrong" , text = "This feature is not available")
 
 
 
@@ -83,18 +78,7 @@ def login() :
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-    if request.method == "POST" : 
-        return render_template("signup.html")
-    else : 
-        email = request.form.get("email")
-        password = request.form.get("password")
-
-        #check exists for email 
-        if email != True : 
-            pass #create account on db
-            return "your account is created" 
-        else : 
-            return "the email is already used"
+    return render_template("notice.html" , title = "Wrong" , text = "This feature is not available")
 
 
 
@@ -126,4 +110,4 @@ def contactus() :
 
 
 if (__name__) == ("__main__") : 
-    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80 , debug=False)
+    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80 , debug=True)
