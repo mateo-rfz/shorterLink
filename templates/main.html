@@ -9,7 +9,7 @@
 <body class="flex flex-col min-h-screen w-full overflow-x-hidden">
     <!-- Header -->
     <header class="flex flex-wrap justify-between items-center p-5 bg-gray-800 text-white w-full">
-        <h1 class="text-3xl font-bold">Shorter Link</h1>
+        <h1 class="text-3xl sm:text-4xl font-bold">Shorter Link</h1>
         <div class="flex space-x-2 w-auto">
             <form action="{{ url_for('login') }}" method="GET">
                 <button type="submit" class="px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-base bg-blue-500 rounded-lg hover:bg-blue-600">Login</button>
@@ -21,13 +21,15 @@
     </header>
     
     <!-- Main Content -->
-    <main class="flex flex-col sm:flex-row flex-1 justify-between p-10 space-y-5 sm:space-y-0 w-full">
-        <div class="sm:w-1/2">
-            <h2 class="text-xl font-semibold">Our Service</h2>
-            <p class="mt-2 text-gray-700">We provide a reliable and efficient link shortening service with analytics and easy management.</p>
-            <div class="mt-5 flex justify-center sm:justify-start">
-                <form action="{{ url_for('home') }}" method="GET">
-                    <button type="submit" class="px-5 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">Let's Try</button>
+    <main class="flex flex-col sm:flex-row flex-1 justify-between p-10 space-y-5 sm:space-y-0 w-full gap-10">
+        <div class="sm:w-1/2 text-center sm:text-left">
+            <h2 class="text-3xl font-semibold">Shorter Link</h2>
+            <p class="mt-2 text-lg sm:text-xl text-gray-700">The URL shortening service is designed to help you create shorter links for easier sharing and tracking. It provides a variety of tools to manage your shortened links efficiently. These tools include features like displaying the total number of views, tracking view counts over time, creating custom short links with personalized URLs, and enabling or disabling links whenever needed. This allows you to have full control over your links and gain insights into their performance, ensuring a seamless experience for both you and your audience.</p>
+            <div class="mt-5 flex justify-center">
+                <form action="{{ url_for('createLink') }}" method="GET">
+                    <button type="submit" class="px-20 py-3 text-lg bg-purple-500 text-white rounded-lg hover:bg-purple-600">
+                        Let's Try
+                    </button>
                 </form>
             </div>
         </div>
@@ -55,13 +57,12 @@
     <!-- Footer -->
     <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 text-white space-y-4 sm:space-y-0 text-center sm:text-left relative w-full overflow-hidden">
         <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
-            <a href="#policy" class="hover:text-gray-400">Policy</a>
-            <a href="#about" class="hover:text-gray-400">About</a>
-            <a href="#contact" class="hover:text-gray-400">Contact Us</a>
+            <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
+            <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
+            <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
         </div>
         <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
-            <a href="https://github.com" class="hover:text-gray-400">GitHub</a>
-            <a href="mailto:contact@example.com" class="hover:text-gray-400">Email</a>
+            <a href="https://github.com/mateo-rfz/shorterlink" class="hover:text-gray-400">GitHub</a>
         </div>
         <div class="w-full text-center text-sm font-light mt-8 sm:mt-0 sm:absolute sm:bottom-2">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
     </footer>
