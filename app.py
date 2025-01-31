@@ -11,8 +11,13 @@ from modules import shortLinkCreator
 app = Flask(__name__)
 
 
-#constants
-DOMAIN = request.url
+# Constants
+DOMAIN = None
+
+@app.before_request
+def before_request():
+    global DOMAIN
+    DOMAIN = request.url_root 
  
  
 
