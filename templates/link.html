@@ -19,8 +19,20 @@
     
     <!-- Main Content -->
     <main class="flex-1 p-10 text-center sm:text-left max-w-4xl mx-auto">
-        <h2 class="text-3xl font-semibold"><a href="{{domain}}/{{shortlink}}">Click on Click</a></h2>
-
+        <div class="copy-box" onclick="copyText(this)" data-copy="{{ domain }}/{{ shortLink }}">
+            <span>Click to copy : {{ domain }}/{{ shortLink }}</span>
+        </div>
+    
+        <script>
+            function copyText(element) {
+                var text = element.getAttribute("data-copy");
+                navigator.clipboard.writeText(text).then(() => {
+                    alert("Copied to clipboard: " + text);
+                }).catch(err => {
+                    console.error("Error copying text: ", err);
+                });
+            }
+        </script>
     </main>
     
     <!-- Footer -->
