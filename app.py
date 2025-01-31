@@ -9,6 +9,10 @@ from modules import shortLinkCreator
 
 
 app = Flask(__name__)
+
+
+#constants
+DOMAIN = request.url
  
  
 
@@ -56,8 +60,7 @@ def createLink() :
 
         dbController.createShortUrl(username , originLink , shortLink)
 
-        return render_template("link.html" , title = "Success" , domain = socket.gethostbyname(socket.gethostname()) , shortLink = shortLink)
-
+        return render_template("link.html" , title = "Success" , domain = DOMAIN , shortLink = shortLink)
 
 
 
