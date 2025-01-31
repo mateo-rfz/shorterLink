@@ -14,9 +14,10 @@ def createShortLink() :
 
 
         p = (p1 + p2 + p3 + p4 + p5)
-
+ 
         shLinks = dbController.allShortLinks()
         for i in shLinks : 
             if p == i : 
                 break
-        return p
+        else : 
+            return p
