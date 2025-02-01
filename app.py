@@ -1,4 +1,4 @@
-from flask import Flask , render_template , request , redirect , url_for
+from flask import Flask , render_template , request , redirect , url_for , send_file
 
 #import socket for find local ip
 import socket
@@ -45,6 +45,23 @@ def redirectPage(shortLink) :
     else : 
         return render_template("notice.html" ,title = "Wrong page" , text = "we cant find this page on database") 
         
+
+
+
+
+
+#api for qrcodes
+@app.route("/qrcode/<string:shortLink>" , methods = ["GET" , "POST"])
+def qrcode(shortLink) : 
+    #create qrcode 
+    return send_file(f"{fileName}.png")
+
+
+
+@app.route("/dqrcode/<string:shortLink>" , methods = ["GET" , "POST"])
+def dqrcode(shortLink) : 
+    #create qrcode
+    return send_file(f"{fileName}.png" , as_attachment=True)
 
 
 
