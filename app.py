@@ -7,6 +7,8 @@ from modules import dbController
 
 from modules import shortLinkCreator
 
+from modules import qrCodeTool
+
 
 app = Flask(__name__)
 
@@ -53,15 +55,15 @@ def redirectPage(shortLink) :
 #api for qrcodes
 @app.route("/qrcode/<string:shortLink>" , methods = ["GET" , "POST"])
 def qrcode(shortLink) : 
-    #create qrcode 
-    return send_file(f"{fileName}.png")
+    qrCodeTool.QrcodeTool(DOMAIN , shortLink).qrGenerator()
+    return send_file(f"/tmp/qrcode/{shortLink}.png")
 
 
 
 @app.route("/dqrcode/<string:shortLink>" , methods = ["GET" , "POST"])
 def dqrcode(shortLink) : 
-    #create qrcode
-    return send_file(f"{fileName}.png" , as_attachment=True)
+    qrCodeTool.QrcodeTool(DOMAIN , shortLink).qrGenerator()
+    return send_file(f"/tmp/qrcode/{shortLink}.png" , as_attachment= True)
 
 
 
