@@ -5,43 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggle = document.getElementById('dark-mode-toggle');
-            if (toggle) {
-                toggle.addEventListener('click', () => {
-                    document.documentElement.classList.toggle('dark');
-                });
-            }
-        });
 
-        function copyToClipboard() {
-            const link = document.getElementById('shortLink').getAttribute('href');
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(link).then(() => {
-                    showNotification();
-                });
-            } else {
-                const textArea = document.createElement('textarea');
-                textArea.value = link;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showNotification();
-                } catch (err) {
-                    console.error('Unable to copy', err);
-                }
-                document.body.removeChild(textArea);
-            }
-        }
 
-        function showNotification() {
-            const notification = document.getElementById('copyNotification');
-            notification.classList.remove('hidden');
-            setTimeout(() => notification.classList.add('hidden'), 2000);
-        }
-    </script>
 </head>
 <body class="flex flex-col min-h-screen w-full overflow-x-hidden bg-gray-900 text-white">
     <!-- Header -->
@@ -61,12 +26,6 @@
         <!-- Link Container -->
         <div class="flex flex-col sm:flex-row items-center sm:space-x-2 bg-gray-800 p-4 rounded-lg border border-gray-600 w-full">
             <a href="{{ link }}" target="_blank" id="shortLink" class="text-blue-400 hover:text-blue-500 break-all w-full text-center sm:text-left">{{ link }}</a>
-            <button 
-                onclick="copyToClipboard()" 
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm mt-2 sm:mt-0"
-            >
-                Copy
-            </button>
         </div>
         
         <!-- Copy Notification -->
