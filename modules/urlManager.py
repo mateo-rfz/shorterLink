@@ -123,9 +123,9 @@ class ShowUrlWithShortLink:
             conn.close()
 
             if result:
-                return result
+                return result[2]
             else:
                 return False
 
         except Exception as e:
-            return [False , e]
+            return False
