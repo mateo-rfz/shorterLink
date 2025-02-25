@@ -8,13 +8,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('dark-mode-toggle');
-            toggle.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-            });
+            if (toggle) {
+                toggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                });
+            }
         });
 
         function copyToClipboard() {
-            const link = document.getElementById('shortLink').textContent;
+            const link = document.getElementById('shortLink').getAttribute('href');
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(link).then(() => {
                     showNotification();
@@ -22,10 +24,7 @@
             } else {
                 const textArea = document.createElement('textarea');
                 textArea.value = link;
-                textArea.style.position = 'fixed';
-                textArea.style.opacity = '0';
                 document.body.appendChild(textArea);
-                textArea.focus();
                 textArea.select();
                 try {
                     document.execCommand('copy');
@@ -60,11 +59,11 @@
         <h2 class="text-3xl font-semibold mb-4">Your Shortened Link:</h2>
         
         <!-- Link Container -->
-        <div class="flex items-center space-x-2 bg-gray-800 p-4 rounded-lg border border-gray-600">
-            <a href="{{ link }}" target="_blank" id="shortLink" class="text-blue-400 hover:text-blue-500 break-all">{{ link }}</a>
+        <div class="flex flex-col sm:flex-row items-center sm:space-x-2 bg-gray-800 p-4 rounded-lg border border-gray-600 w-full">
+            <a href="{{ link }}" target="_blank" id="shortLink" class="text-blue-400 hover:text-blue-500 break-all w-full text-center sm:text-left">{{ link }}</a>
             <button 
                 onclick="copyToClipboard()" 
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm mt-2 sm:mt-0"
             >
                 Copy
             </button>
