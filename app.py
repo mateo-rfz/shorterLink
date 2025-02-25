@@ -81,14 +81,14 @@ def createLink() :
 
         if shortLink == None : 
             shortURL = urlManager.AddUrl(email , originLink).add()
-            return render_template("notice.html" , title = "Your link created" , text = f"YOUR Create Link is {shortURL}")
+            return render_template("showLink.html" , title = "Your link created" , link = shortURL)
         else : 
             shortURL = urlManager.AddUrl(email , originLink , shortLink).add()
             
             if not shortURL : 
                 return render_template("notice.html" , title = "URL USED" , text = "url used by another user")
             else : 
-                return render_template("notice.html" , title = "Your link created" , text = f"YOUR Create Link is {shortURL}")
+                return render_template("showLink.html" , title = "Your link created" , link = shortURL)
 
 
     else : 
