@@ -63,20 +63,27 @@ class CheckUserValidation:
         return sha256(self.password.encode('utf-8')).hexdigest()
 
     def __userExistenceChecker(self):
-        conn = sqlite3.connect("users.db")
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT password FROM users 
-            WHERE email=? 
-            ORDER BY id DESC LIMIT 1
-        """, (self.email,))
-        result = cursor.fetchone()
-        conn.close()
+        try : 
+            conn = sqlite3.connect("users.db")
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT password FROM users 
+                WHERE email=? 
+                ORDER BY id DESC LIMIT 1
+            """, (self.email,))
+            result = cursor.fetchone()
+            conn.close()
 
-        if result:  
-            stored_password = result[0]
-            return stored_password == self.__passHasher()
-        return False
+            if result:  
+                stored_password = result[0]
+                return stored_password == self.__passHasher()
+            return False
+        
+        except Exception : 
+            return False
+        
+        finally : 
+            conn.close()
 
 
     def validationChecker(self):
