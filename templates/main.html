@@ -1,62 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shorter Link</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex flex-col min-h-screen w-full bg-gray-900 text-white overflow-x-hidden p-4">
+<body class="flex flex-col min-h-screen bg-gray-900 text-white">
     <!-- Header -->
-    <header class="flex justify-between items-center p-5 bg-gray-800 w-full rounded-lg">
+    <header class="bg-gray-800 text-white p-5 flex justify-between items-center shadow-lg w-full">
         <h1 class="text-2xl sm:text-3xl font-bold">Shorter Link</h1>
+        <nav class="hidden sm:flex space-x-4">
+            <a href="{{ url_for('main') }}" class="hover:text-gray-400">Home</a>
+            <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
+            <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
+        </nav>
         <div class="flex space-x-2">
             <form action="{{ url_for('login') }}" method="GET">
-                <button type="submit" class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600">Login</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm">Login</button>
             </form>
             <form action="{{ url_for('signup') }}" method="GET">
-                <button type="submit" class="px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600">Sign Up</button>
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 text-sm">Sign Up</button>
             </form>
         </div>
     </header>
-    
-    <!-- Main Content -->
-    <main class="flex flex-col sm:flex-row justify-between p-10 gap-10 w-full">
-        <div class="sm:w-1/2 text-center sm:text-left">
-            <h2 class="text-3xl font-semibold mb-4">Shorter Link</h2>
-            <p class="text-base sm:text-lg text-gray-400">The URL shortening service helps you create shorter links for easier sharing and tracking. It offers tools to manage your links, track views, and create custom URLs.</p>
-            <div class="mt-5">
-                <form action="{{ url_for('createLink') }}" method="GET">
-                    <button type="submit" class="px-16 py-3 text-base bg-purple-600 rounded-lg hover:bg-purple-700">Let's Try</button>
-                </form>
-            </div>
-        </div>
 
-        <div class="sm:w-1/2 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-gray-800 p-5 rounded-lg shadow-md text-center">
-                <p class="text-2xl font-bold">{{ linksCreated }}</p>
+    <!-- Hero Section -->
+    <section class="flex-1 flex flex-col items-center justify-center text-center px-6 py-12">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Simplify Your Links</h2>
+        <p class="text-base sm:text-lg text-gray-400 max-w-2xl">Create short and memorable links for easy sharing and tracking. Manage your links efficiently with analytics and customizations.</p>
+        <form action="{{ url_for('createLink') }}" method="GET" class="mt-6">
+            <button type="submit" class="bg-purple-600 text-white py-3 px-8 rounded-lg hover:bg-purple-700 text-base sm:text-lg shadow-lg">Get Started</button>
+        </form>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="w-full bg-gray-800 py-12 px-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+            <div class="bg-gray-700 p-5 rounded-lg shadow-lg">
+                <p class="text-3xl font-bold">{{ linksCreated }}</p>
                 <p class="text-sm text-gray-400">Links Created</p>
             </div>
-            <div class="bg-gray-800 p-5 rounded-lg shadow-md text-center">
-                <p class="text-2xl font-bold">{{ view }}</p>
-                <p class="text-sm text-gray-400">Views</p>
+            <div class="bg-gray-700 p-5 rounded-lg shadow-lg">
+                <p class="text-3xl font-bold">{{ view }}</p>
+                <p class="text-sm text-gray-400">Total Views</p>
             </div>
-            <div class="bg-gray-800 p-5 rounded-lg shadow-md text-center">
-                <p class="text-2xl font-bold">{{ users }}</p>
-                <p class="text-sm text-gray-400">Users</p>
+            <div class="bg-gray-700 p-5 rounded-lg shadow-lg">
+                <p class="text-3xl font-bold">{{ users }}</p>
+                <p class="text-sm text-gray-400">Active Users</p>
             </div>
         </div>
-    </main>
-    
+    </section>
+
     <!-- Footer -->
-    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 text-white space-y-4 sm:space-y-0 w-full rounded-lg mt-auto">
-        <div class="flex space-x-4">
+    <footer class="bg-gray-800 text-white p-8 mt-auto flex flex-col sm:flex-row justify-between items-center text-center w-full space-y-4 sm:space-y-0">
+        <div class="flex space-x-6">
             <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
             <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
             <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
         </div>
         <a href="https://github.com/mateo-rfz/shorterlink" class="hover:text-gray-400">GitHub</a>
-        <div class="text-sm font-light">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
+        <p class="text-sm">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></p>
     </footer>
-</body> 
+</body>
 </html>
