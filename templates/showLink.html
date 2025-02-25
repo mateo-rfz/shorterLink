@@ -15,11 +15,32 @@
 
         function copyToClipboard() {
             const link = document.getElementById('shortLink').textContent;
-            navigator.clipboard.writeText(link).then(() => {
-                const notification = document.getElementById('copyNotification');
-                notification.classList.remove('hidden');
-                setTimeout(() => notification.classList.add('hidden'), 2000);
-            });
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(link).then(() => {
+                    showNotification();
+                });
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showNotification();
+                } catch (err) {
+                    console.error('Unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.classList.remove('hidden');
+            setTimeout(() => notification.classList.add('hidden'), 2000);
         }
     </script>
 </head>
