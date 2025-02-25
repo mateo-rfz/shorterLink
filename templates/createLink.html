@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Link</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('dark-mode-toggle');
+            toggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+        });
+
         function toggleCustomLink() {
             const shortLinkInput = document.getElementById('shortLinkContainer');
             shortLinkInput.classList.toggle('hidden');
         }
     </script>
 </head>
-<body class="flex flex-col min-h-screen w-full overflow-x-hidden">
+<body class="flex flex-col min-h-screen w-full overflow-x-hidden bg-gray-900 text-white">
     <!-- Header -->
     <header class="flex justify-between items-center p-5 bg-gray-800 text-white w-full">
         <h1 class="text-3xl font-bold">Create Link</h1>
@@ -31,26 +38,26 @@
             <div>
                 <label for="originLink" class="block text-lg font-medium">Original Link:</label>
                 <input type="url" id="originLink" name="originLink" required
-                       class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800">
+                       class="w-full p-3 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-400">
             </div>
             <button type="button" onclick="toggleCustomLink()" 
-                    class="w-full bg-gray-800 text-white p-3 rounded-lg hover:bg-gray-700 transition ease-in-out duration-300 transform hover:scale-105">➕ Add Custom Short Link</button>
+                    class="w-full bg-gray-700 text-white p-3 rounded-lg hover:bg-gray-600 transition ease-in-out duration-300 transform hover:scale-105">➕ Add Custom Short Link</button>
             <div id="shortLinkContainer" class="hidden mt-4">
                 <label for="shortLink" class="block text-lg font-medium">Custom Short Link (optional):</label>
                 <input type="text" id="shortLink" name="shortLink"
-                       class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800">
+                       class="w-full p-3 border border-gray-700 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-400">
             </div>
-            <button type="submit" class="w-full bg-gray-800 text-white p-3 rounded-lg hover:bg-gray-700 transition ease-in-out duration-300 transform hover:scale-105">🚀 Create Link</button>
+            <button type="submit" class="w-full bg-gray-700 text-white p-3 rounded-lg hover:bg-gray-600 transition ease-in-out duration-300 transform hover:scale-105">🚀 Create Link</button>
         </form>
     </main>
     
     <!-- Footer -->
-    <footer class="flex justify-between items-center p-5 bg-gray-800 text-white text-sm">
-        <p>Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></p>
-        <div class="space-x-4">
-            <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
-            <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
-            <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
+    <footer class="p-8 bg-gray-800 text-white flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
+        <p class="text-sm">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></p>
+        <div class="flex space-x-6 mt-4 sm:mt-0">
+            <a href="{{ url_for('policy') }}" class="hover:text-gray-400 text-sm">Policy</a>
+            <a href="{{ url_for('about') }}" class="hover:text-gray-400 text-sm">About</a>
+            <a href="{{ url_for('contactus') }}" class="hover:text-gray-400 text-sm">Contact Us</a>
         </div>
     </footer>
 </body>

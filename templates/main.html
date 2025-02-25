@@ -6,65 +6,57 @@
     <title>Shorter Link</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex flex-col min-h-screen w-full overflow-x-hidden">
+<body class="flex flex-col min-h-screen w-full bg-gray-900 text-white overflow-x-hidden p-4">
     <!-- Header -->
-    <header class="flex flex-wrap justify-between items-center p-5 bg-gray-800 text-white w-full">
-        <h1 class="text-3xl sm:text-4xl font-bold">Shorter Link</h1>
-        <div class="flex space-x-2 w-auto">
+    <header class="flex justify-between items-center p-5 bg-gray-800 w-full rounded-lg">
+        <h1 class="text-2xl sm:text-3xl font-bold">Shorter Link</h1>
+        <div class="flex space-x-2">
             <form action="{{ url_for('login') }}" method="GET">
-                <button type="submit" class="px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-base bg-blue-500 rounded-lg hover:bg-blue-600">Login</button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600">Login</button>
             </form>
             <form action="{{ url_for('signup') }}" method="GET">
-                <button type="submit" class="px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-base bg-green-500 rounded-lg hover:bg-green-600">Sign Up</button>
+                <button type="submit" class="px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600">Sign Up</button>
             </form>
         </div>
     </header>
     
     <!-- Main Content -->
-    <main class="flex flex-col sm:flex-row flex-1 justify-between p-10 space-y-5 sm:space-y-0 w-full gap-10">
+    <main class="flex flex-col sm:flex-row justify-between p-10 gap-10 w-full">
         <div class="sm:w-1/2 text-center sm:text-left">
-            <h2 class="text-3xl font-semibold">Shorter Link</h2>
-            <p class="mt-2 text-lg sm:text-xl text-gray-700">The URL shortening service is designed to help you create shorter links for easier sharing and tracking. It provides a variety of tools to manage your shortened links efficiently. These tools include features like displaying the total number of views, tracking view counts over time, creating custom short links with personalized URLs, and enabling or disabling links whenever needed. This allows you to have full control over your links and gain insights into their performance, ensuring a seamless experience for both you and your audience.</p>
-            <div class="mt-5 flex justify-center">
+            <h2 class="text-3xl font-semibold mb-4">Shorter Link</h2>
+            <p class="text-base sm:text-lg text-gray-400">The URL shortening service helps you create shorter links for easier sharing and tracking. It offers tools to manage your links, track views, and create custom URLs.</p>
+            <div class="mt-5">
                 <form action="{{ url_for('createLink') }}" method="GET">
-                    <button type="submit" class="px-20 py-3 text-lg bg-purple-500 text-white rounded-lg hover:bg-purple-600">
-                        Let's Try
-                    </button>
+                    <button type="submit" class="px-16 py-3 text-base bg-purple-600 rounded-lg hover:bg-purple-700">Let's Try</button>
                 </form>
             </div>
         </div>
-        <div class="sm:w-1/2 flex justify-center sm:justify-end text-3xl font-bold w-full">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center w-full">
-                <!-- Links Created -->
-                <div class="h-20 sm:h-24 flex flex-col justify-center bg-gray-100 rounded-lg shadow-sm px-6">
-                    <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ linksCreated }}</p>
-                    <p class="text-sm sm:text-base text-gray-600">Links Created</p>
-                </div>
-                <!-- Views -->
-                <div class="h-20 sm:h-24 flex flex-col justify-center bg-gray-100 rounded-lg shadow-sm px-6">
-                    <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ view }}</p>
-                    <p class="text-sm sm:text-base text-gray-600">Views</p>
-                </div>
-                <!-- Users -->
-                <div class="h-20 sm:h-24 flex flex-col justify-center bg-gray-100 rounded-lg shadow-sm px-6">
-                    <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ users }}</p>
-                    <p class="text-sm sm:text-base text-gray-600">Users</p>
-                </div>
+
+        <div class="sm:w-1/2 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-gray-800 p-5 rounded-lg shadow-md text-center">
+                <p class="text-2xl font-bold">{{ linksCreated }}</p>
+                <p class="text-sm text-gray-400">Links Created</p>
+            </div>
+            <div class="bg-gray-800 p-5 rounded-lg shadow-md text-center">
+                <p class="text-2xl font-bold">{{ view }}</p>
+                <p class="text-sm text-gray-400">Views</p>
+            </div>
+            <div class="bg-gray-800 p-5 rounded-lg shadow-md text-center">
+                <p class="text-2xl font-bold">{{ users }}</p>
+                <p class="text-sm text-gray-400">Users</p>
             </div>
         </div>
     </main>
     
     <!-- Footer -->
-    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 text-white space-y-4 sm:space-y-0 text-center sm:text-left relative w-full overflow-hidden">
-        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 text-white space-y-4 sm:space-y-0 w-full rounded-lg mt-auto">
+        <div class="flex space-x-4">
             <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
             <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
             <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
         </div>
-        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
-            <a href="https://github.com/mateo-rfz/shorterlink" class="hover:text-gray-400">GitHub</a>
-        </div>
-        <div class="w-full text-center text-sm font-light mt-8 sm:mt-0 sm:absolute sm:bottom-2">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
+        <a href="https://github.com/mateo-rfz/shorterlink" class="hover:text-gray-400">GitHub</a>
+        <div class="text-sm font-light">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
     </footer>
 </body> 
 </html>

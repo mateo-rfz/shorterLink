@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('dark-mode-toggle');
+            toggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+        });
+    </script>
 </head>
-<body class="flex flex-col min-h-screen w-full overflow-x-hidden">
+<body class="flex flex-col min-h-screen w-full overflow-x-hidden bg-gray-900 text-white">
     <!-- Header -->
     <header class="flex flex-wrap justify-between items-center p-5 bg-gray-800 text-white w-full">
         <h1 class="text-3xl sm:text-4xl font-bold">{{title}}</h1>
@@ -20,11 +28,10 @@
     <!-- Main Content -->
     <main class="flex-1 p-10 text-center sm:text-left max-w-4xl mx-auto">
         <h2 class="text-3xl font-semibold">{{text}}</h2>
-
     </main>
     
     <!-- Footer -->
-    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 text-white space-y-4 sm:space-y-0 text-center sm:text-left relative w-full overflow-hidden">
+    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 space-y-4 sm:space-y-0 text-center sm:text-left relative w-full overflow-hidden">
         <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
             <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
             <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
