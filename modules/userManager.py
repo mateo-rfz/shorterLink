@@ -1,6 +1,8 @@
 from hashlib import sha256
 import sqlite3
 
+from modules import mainPageMetric
+
 
 
 
@@ -37,6 +39,9 @@ class AddUser :
                         (self.email , self.__passHasher()))
             conn.commit()
             conn.close()
+
+            mainPageMetric.Users().addToUsersCounter()
+
             return True
         except sqlite3.IntegrityError : 
             return [False , "userExists"]

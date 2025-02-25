@@ -1,7 +1,8 @@
 import random
 import sqlite3
 import string
-
+from modules import metricManager
+from modules import mainPageMetric
 
 class AddUrl:
     def __init__(self, email, originLink, shortLink=None):
@@ -59,6 +60,11 @@ class AddUrl:
         """, (self.email, self.originLink, self.shortLink))
         conn.commit()
         conn.close()
+
+        metricManager.AddItem(self.shortLink).addItem()
+        mainPageMetric.LinksCounter().addToLinkCounter()
+        
+
         return True
 
     def add(self):
@@ -124,6 +130,36 @@ class ShowUrlWithShortLink:
 
             if result:
                 return result[2]
+            else:
+                return False
+
+        except Exception as e:
+            return False
+        
+
+
+
+
+
+
+class shortUrlWithEmail : 
+    def __init__(self , email) : 
+        self.email = email
+
+
+    def show(self) : 
+        try:
+            conn = sqlite3.connect("links.db")
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM links WHERE email = ?
+            """, (self.email,))
+
+            result = cursor.fetchall()
+            conn.close()
+
+            if result:
+                return result
             else:
                 return False
 
