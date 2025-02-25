@@ -100,3 +100,32 @@ class DelUrl :
             return [False , e]
         finally : 
             conn.close()
+
+
+
+
+
+
+
+class ShowUrlWithShortLink:
+    def __init__(self, shortLink):
+        self.shortLink = shortLink
+
+    def show(self):
+        try:
+            conn = sqlite3.connect("links.db")
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM links WHERE shortLink = ?
+            """, (self.shortLink,))
+
+            result = cursor.fetchone()
+            conn.close()
+
+            if result:
+                return result
+            else:
+                return False
+
+        except Exception as e:
+            return [False , e]
