@@ -9,25 +9,37 @@ from modules import metricManager ,urlManager ,registerKeyManager ,mainPageMetri
 app = Flask(__name__)
 
 
-# Constants
-DOMAIN = None
 
 @app.before_request
 def before_request():
-    global DOMAIN
-    DOMAIN = request.url_root 
+    mainPageMetric.Views().addToViewsCounter()
  
  
 
 @app.route("/", methods=["GET", "POST"])
 def main():
-    mainPageMetric.Views().addToViewsCounter()
+    email = request.cookies.get("email")
+    registerKey = request.cookies.get("key")
 
-    links_created = mainPageMetric.LinksCounter().showLinksCounter()
-    views = mainPageMetric.Views().showViewsCounter()
-    users = mainPageMetric.Users().showUsersCounter()
+    if registerKeyManager.KeyValidation(email , registerKey).checkValidation() is True : 
+        links = []
+        o = urlManager.shortUrlWithEmail("mahdifeyzolahy@gmail.com").show()
+        
+        try : 
+            for i in o : 
+                view = metricManager.LinkView(i[3]).view()
+                links.append([i[3] , i[2] , view[2]])
+        except Exception : 
+            pass
+        
+        return render_template("cmain.html" , email = email , links = links)
 
-    return render_template("main.html", linksCreated=links_created, view=views, users=users)
+    else :
+        links_created = mainPageMetric.LinksCounter().showLinksCounter()
+        views = mainPageMetric.Views().showViewsCounter()
+        users = mainPageMetric.Users().showUsersCounter()
+
+        return render_template("main.html", linksCreated=links_created, view=views, users=users)
 
 
 
@@ -39,6 +51,7 @@ def main():
 @app.route("/<string:shortLink>" , methods = ["GET" , "POST"])
 def redirectPage(shortLink) : 
     origin = urlManager.ShowUrlWithShortLink(shortLink).show()
+    metricManager.AddView(shortLink).addView()
 
     if origin : 
         return redirect(origin)
