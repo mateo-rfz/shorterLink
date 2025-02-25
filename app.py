@@ -1,13 +1,9 @@
-from flask import Flask , render_template , request , redirect , url_for , send_file
+from flask import Flask , render_template , request , redirect , url_for , send_file , make_response
 
 #import socket for find local ip
 import socket
 
-from modules import dbController
-
-from modules import shortLinkCreator
-
-from modules import qrCodeTool
+from modules import metricManager ,urlManager ,registerKeyManager ,mainPageMetric, userManager
 
 
 app = Flask(__name__)
@@ -25,9 +21,11 @@ def before_request():
 
 @app.route("/", methods=["GET", "POST"])
 def main():
-    links_created = 123 
-    views = 4567 
-    users = 89 
+    mainPageMetric.Views().addToViewsCounter()
+
+    links_created = mainPageMetric.LinksCounter().showLinksCounter()
+    views = mainPageMetric.Views().showViewsCounter()
+    users = mainPageMetric.Users().showUsersCounter()
 
     return render_template("main.html", linksCreated=links_created, view=views, users=users)
 
@@ -40,10 +38,10 @@ def main():
 
 @app.route("/<string:shortLink>" , methods = ["GET" , "POST"])
 def redirectPage(shortLink) : 
-    origin = dbController.urlFinder(shortLink)
+    origin = urlManager.ShowUrlWithShortLink(shortLink).show()
 
-    if origin :
-        return redirect(list(origin)[2])
+    if origin : 
+        return redirect(origin)
     else : 
         return render_template("notice.html" ,title = "Wrong page" , text = "we cant find this page on database") 
         
@@ -52,39 +50,40 @@ def redirectPage(shortLink) :
 
 
 
-#api for qrcodes
-@app.route("/qrcode/<string:shortLink>" , methods = ["GET" , "POST"])
-def qrcode(shortLink) : 
-    qrCodeTool.QrcodeTool(DOMAIN , shortLink).qrGenerator()
-    return send_file(f"/tmp/qrcode/{shortLink}.png")
-
-
-
-@app.route("/dqrcode/<string:shortLink>" , methods = ["GET" , "POST"])
-def dqrcode(shortLink) : 
-    qrCodeTool.QrcodeTool(DOMAIN , shortLink).qrGenerator()
-    return send_file(f"/tmp/qrcode/{shortLink}.png" , as_attachment= True)
-
-
-
-
-
-
-
-
-
-@app.route("/createLink" , methods = ["GET" , "POST"])
+@app.route("/createlink" , methods = ["GET" , "POST"])
 def createLink() : 
-    if request.method == "GET" : 
-        return render_template("createLink.html")
-    else : 
-        username = request.form.get("username")
+    if request.method == "POST" : 
+        email = request.cookies.get("email")
+        registerKey = request.cookies.get("key")
+
+        if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+            return render_template("notice.html" , title = "Need to login" , text = "for create link you need to login first")
+        
         originLink = request.form.get("originLink")
-        shortLink =  shortLinkCreator.createShortLink()
+        shortLink = request.form.get("shortLink") or None   
 
-        dbController.createShortUrl(username , originLink , shortLink)
 
-        return render_template("link.html" , title = "Success" , domain = DOMAIN , shortLink = shortLink)
+        if not originLink:
+            return render_template("notice.html", title="Error", text="Origin link is required.")
+
+        if shortLink == None : 
+            shortURL = urlManager.AddUrl(email , originLink).add()
+            return render_template("notice.html" , title = "Your link created" , text = f"YOUR Create Link is {shortURL}")
+        else : 
+            shortURL = urlManager.AddUrl(email , originLink , shortLink).add()
+            
+            if not shortURL : 
+                return render_template("notice.html" , title = "URL USED" , text = "url used by another user")
+            else : 
+                return render_template("notice.html" , title = "Your link created" , text = f"YOUR Create Link is {shortURL}")
+
+
+    else : 
+        return render_template("createLink.html")
+
+
+
+
 
 
 
@@ -94,7 +93,22 @@ def createLink() :
 
 @app.route("/login" , methods = ["GET" , "POST"])
 def login() : 
-    return render_template("notice.html" , title = "Wrong" , text = "This feature is not available")
+    if request.method == "POST" : 
+       email = request.form.get("email")
+       password = request.form.get("password")
+
+       o = userManager.CheckUserValidation(email , password).validationChecker()
+       if not o : 
+            return render_template("login.html", title = "WRONG" , text = "your username or password is wrong")
+       else : 
+            registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
+            resp = make_response(redirect(url_for('main')))
+            resp.set_cookie('email', email , max_age=60*60*24*7)  
+            resp.set_cookie('key', registerKey , max_age=60*60*24*7)  
+            return resp
+    
+    else :
+       return render_template("login.html")
 
 
 
@@ -105,8 +119,18 @@ def login() :
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-    return render_template("notice.html" , title = "Wrong" , text = "This feature is not available")
+    if request.method == "POST" : 
+        email = request.form.get("email")
+        password = request.form.get("password")
 
+        o = userManager.AddUser(email , password).adduser()
+        if o is True: 
+            return render_template("notice.html" , title = "CREATED" , text = "your account created")
+        else : 
+            return render_template("notice.html" , title = "Wrong" , text = o[1])
+        
+    else : 
+        return render_template("signup.html")
 
 
 
