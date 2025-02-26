@@ -23,7 +23,7 @@ def main():
 
     if registerKeyManager.KeyValidation(email , registerKey).checkValidation() is True : 
         links = []
-        o = urlManager.shortUrlWithEmail("mahdifeyzolahy@gmail.com").show()
+        o = urlManager.shortUrlWithEmail(email).show()
         
         try : 
             for i in o : 
