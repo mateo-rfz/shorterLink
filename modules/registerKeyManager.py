@@ -59,7 +59,7 @@ class AddRegisterKey:
             conn.close()
             return True
         except Exception as e : 
-            return [False , e]
+            return False
 
 
 
@@ -76,9 +76,9 @@ class AddRegisterKey:
             conn.close()
             return True
         except sqlite3.IntegrityError : 
-            return [False , "keyExists"]
+            return False
         except Exception as e : 
-            return [False , e]
+            return False
 
 
 
@@ -131,4 +131,4 @@ class KeyValidation :
                 return True
             return False
         except Exception as e: 
-            return [False , e]
+            return False
