@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-
 </head>
 <body class="flex flex-col min-h-screen w-full overflow-x-hidden bg-gray-900 text-white">
     <!-- Header -->
@@ -24,10 +22,17 @@
         <h2 class="text-3xl font-semibold mb-4">Your Shortened Link:</h2>
         
         <!-- Link Container -->
-        <div class="flex flex-col sm:flex-row items-center sm:space-x-2 bg-gray-800 p-4 rounded-lg border border-gray-600 w-full">
-            <a href="{{ link }}" target="_blank" id="shortLink" class="text-blue-400 hover:text-blue-500 break-all w-full text-center sm:text-left">{{ link }}</a>
+        <div class="w-full">
+            <div class="flex flex-col sm:flex-row items-center sm:space-x-2 bg-gray-800 p-4 rounded-lg border border-gray-600 w-full">
+                <a href="{{ link }}" target="_blank" id="shortLink" class="text-blue-400 hover:text-blue-500 break-all w-full text-center sm:text-left">{{ link }}</a>
+            </div>
+
+            <!-- Link to Create Link Page -->
+            <div class="mt-4 w-full">
+                <a href="{{ url_for('createLink') }}" class="block bg-blue-600 hover:bg-blue-500 text-white text-center p-4 rounded-lg transition duration-300">➕ Create Another Link</a>
+            </div>
         </div>
-        
+
         <!-- Copy Notification -->
         <p id="copyNotification" class="hidden text-green-400 mt-2">Link copied to clipboard!</p>
     </main>
