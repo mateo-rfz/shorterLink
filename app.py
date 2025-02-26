@@ -138,9 +138,13 @@ def signup():
 
         o = userManager.AddUser(email , password).adduser()
         if o is True: 
-            return render_template("notice.html" , title = "CREATED" , text = "your account created")
+            registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
+            resp = make_response(redirect(url_for('createLink')))
+            resp.set_cookie('email', email , max_age=60*60*24*7)  
+            resp.set_cookie('key', registerKey , max_age=60*60*24*7)  
+            return resp
         else : 
-            return render_template("notice.html" , title = "Wrong" , text = o[1])
+            return render_template("signup.html" , title = "Error" , text = "An account with this email already exists.")
         
     else : 
         return render_template("signup.html")

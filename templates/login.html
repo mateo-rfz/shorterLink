@@ -37,19 +37,22 @@
             </div>
             <button type="submit" class="bg-gray-700 text-white px-5 py-3 rounded-lg hover:bg-gray-600 w-full transition duration-300">Login</button>
         </form>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('signup') }}" class="text-blue-500 text-lg font-bold hover:text-blue-400">Sign Up</a>
+        </div>
     </main>
 
     <!-- Footer -->
-    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 space-y-4 sm:space-y-0 text-center sm:text-left w-full">
-        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+    <footer class="flex flex-col sm:flex-row justify-between items-center p-5 bg-gray-800 w-full text-center sm:text-left">
+        <div class="flex flex-wrap justify-center sm:justify-start space-x-4 mb-4 sm:mb-0">
             <a href="{{ url_for('policy') }}" class="hover:text-gray-400">Policy</a>
             <a href="{{ url_for('about') }}" class="hover:text-gray-400">About</a>
             <a href="{{ url_for('contactus') }}" class="hover:text-gray-400">Contact Us</a>
         </div>
-        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+        <div class="flex justify-center sm:justify-start space-x-4 mb-4 sm:mb-0">
             <a href="https://github.com/mateo-rfz/shorterlink" class="hover:text-gray-400">GitHub</a>
         </div>
-        <div class="w-full text-center text-sm font-light mt-8 sm:mt-0">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
+        <div class="text-sm font-light">Made with ❤️ by <a href="https://github.com/mateo-rfz" class="hover:text-gray-400 font-semibold">Mateo</a></div>
     </footer>
 </body>
 </html>
