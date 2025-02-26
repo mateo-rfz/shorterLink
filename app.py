@@ -70,14 +70,14 @@ def createLink() :
         registerKey = request.cookies.get("key")
 
         if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
-            return render_template("notice.html" , title = "Need to login" , text = "for create link you need to login first")
+            return render_template("login.html", title = "Need to login" , text = "For create link you need to login first")
         
         originLink = request.form.get("originLink")
         shortLink = request.form.get("shortLink") or None   
 
 
         if not originLink:
-            return render_template("notice.html", title="Error", text="Origin link is required.")
+            return render_template("createLink.html", title="Error", text="Origin link is required.")
 
         if shortLink == None : 
             shortURL = urlManager.AddUrl(email , originLink).add()
@@ -86,7 +86,7 @@ def createLink() :
             shortURL = urlManager.AddUrl(email , originLink , shortLink).add()
             
             if not shortURL : 
-                return render_template("notice.html" , title = "URL USED" , text = "url used by another user")
+                return render_template("createLink.html" , title = "URL USED" , text = "url used by another user")
             else : 
                 return render_template("showLink.html" , title = "Your link created" , link = shortURL)
 
@@ -148,6 +148,7 @@ def signup():
         
     else : 
         return render_template("signup.html")
+
 
 
 
