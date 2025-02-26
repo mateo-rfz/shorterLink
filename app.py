@@ -1,6 +1,6 @@
 from flask import Flask , render_template , request , redirect , url_for , send_file , make_response
 
-#import socket for find local ip
+#import socket for find local ip    
 import socket
 
 from modules import metricManager ,urlManager ,registerKeyManager ,mainPageMetric, userManager
@@ -23,6 +23,11 @@ def main():
 
     if registerKeyManager.KeyValidation(email , registerKey).checkValidation() is True : 
         links = []
+        """
+        this section: 
+        find all short links and origin links with email
+          on urlManager and find the view on metricManager
+        """
         o = urlManager.shortUrlWithEmail(email).show()
         
         try : 
@@ -35,6 +40,10 @@ def main():
         return render_template("cmain.html" , email = email , links = links)
 
     else :
+        """
+        This is the public home page for users
+          who have not signed in to ShorterLink
+        """
         links_created = mainPageMetric.LinksCounter().showLinksCounter()
         views = mainPageMetric.Views().showViewsCounter()
         users = mainPageMetric.Users().showUsersCounter()
@@ -48,10 +57,9 @@ def main():
 
 
 
-@app.route("/<string:shortLink>" , methods = ["GET" , "POST"])
+@app.route("/<string:shortLink>" , methods = ["GET"])
 def redirectPage(shortLink) : 
     origin = urlManager.ShowUrlWithShortLink(shortLink).show()
-    metricManager.AddView(shortLink).addView()
 
     if origin : 
         return redirect(origin)
@@ -115,7 +123,9 @@ def login() :
             return render_template("login.html", title = "WRONG" , text = "your username or password is wrong")
        else : 
             registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
+            #redirect to home page after set cookies
             resp = make_response(redirect(url_for('main')))
+            #the expiration for cookies is 7 days
             resp.set_cookie('email', email , max_age=60*60*24*7)  
             resp.set_cookie('key', registerKey , max_age=60*60*24*7)  
             return resp
@@ -139,7 +149,9 @@ def signup():
         o = userManager.AddUser(email , password).adduser()
         if o is True: 
             registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
+            #redirect to create link page after set cookies
             resp = make_response(redirect(url_for('createLink')))
+            #the expiration for cookies is 7 days
             resp.set_cookie('email', email , max_age=60*60*24*7)  
             resp.set_cookie('key', registerKey , max_age=60*60*24*7)  
             return resp
