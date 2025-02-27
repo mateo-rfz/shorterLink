@@ -62,6 +62,10 @@ DBPORT = config.DBPORT
 
 
 class _DbCreator : 
+    """
+    _DbCreator class
+    this class is only use for create database in Mysql 
+    """
     def createDB() : 
         conn = mysql.connect(host = HOST, 
                      user = DBUSERNAME , 
@@ -77,12 +81,22 @@ class _DbCreator :
 
 
 class AddUser : 
+    """
+    AddUser Class
+
+    This class is used to add a new user to the database using email and password.  
+    * Passwords are securely hashed(SHA-256) before being stored in the database.  
+
+    methods : 
+    - __passHasher : use for hash passwords
+    - __createTable : use for create 'users' table in Mysql (IF NOT EXISTS)
+    - adduser is main method in AddUser class for add user
+    """
     def __init__(self , email , password) : 
         _DbCreator.createDB()
 
         self.email = email
         self.password = password
-        self.username = email[:email.index("@")]
 
 
 
@@ -140,6 +154,16 @@ class AddUser :
 
 
 class CheckUserValidation:
+    """
+    CheckUserValidation class
+
+    This class is used to validate a user's credentials using email and password.
+
+    Methods : 
+    - __passHasher : use for hash passwords
+    - __userExistenceChecker : this method use for check use existence and if exists check db password with input password
+    - validationChecker : the main method in CheckUserValidation class this method return the final __userExistenceChecker answer
+    """
     def __init__(self, email, password):
         _DbCreator.createDB()
         self.email = email
@@ -170,7 +194,9 @@ class CheckUserValidation:
             conn.close()
 
             if result:  
-                stored_password = result[0]
+                stored_password = result[0] 
+                #We use a filter to search the database and return only the email.
+                #and the resault[0] is only email
                 return stored_password == self.__passHasher()
             return False
         
