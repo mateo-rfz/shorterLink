@@ -1,4 +1,5 @@
-from modules import config
+from modules import config , viewManager
+
 import mysql.connector as mysql
 
 
@@ -99,9 +100,11 @@ class LinksCounter:
 
 
 class Views:
-    def __init__(self):
+    def __init__(self , ip = "127.0.0.1"):
         self.db = Database()
         self.__createTable()
+        
+        self.ip = ip
 
 
 
@@ -125,6 +128,10 @@ class Views:
 
 
     def addToViewsCounter(self):
+        if not viewManager.ViewMng(self.ip).adder() : 
+            return False
+
+
         conn = self.db.connect()
         cursor = conn.cursor()
         cursor.execute("UPDATE viewsCounter SET count = count + 1 WHERE id = 1")
