@@ -28,7 +28,7 @@ def main():
         find all short links and origin links with email
           on urlManager and find the view on metricManager
         """
-        o = urlManager.shortUrlWithEmail(email).show()
+        o = urlManager.ShortUrlWithEmail(email).show()
         
         try : 
             for i in o : 
@@ -62,6 +62,7 @@ def redirectPage(shortLink) :
     origin = urlManager.ShowUrlWithShortLink(shortLink).show()
 
     if origin : 
+        metricManager.AddView(shortLink).addView()
         return redirect(origin)
     else : 
         return render_template("notice.html" ,title = "Wrong page" , text = "we cant find this page on database") 
@@ -91,6 +92,7 @@ def createLink() :
             shortURL = urlManager.AddUrl(email , originLink).add()
             return render_template("showLink.html" , title = "Your link created" , link = shortURL)
         else : 
+
             shortURL = urlManager.AddUrl(email , originLink , shortLink).add()
             
             if not shortURL : 
