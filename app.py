@@ -1,4 +1,4 @@
-from flask import Flask , render_template , request , redirect , url_for , send_file , make_response
+from flask import Flask , render_template , request , redirect , url_for , send_file , make_response 
 
 #import socket for find local ip    
 import socket
@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
-    mainPageMetric.Views().addToViewsCounter()
+    mainPageMetric.Views(request.remote_addr).addToViewsCounter()
  
  
 
