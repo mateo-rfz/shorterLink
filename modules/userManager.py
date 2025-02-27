@@ -1,8 +1,50 @@
+
+"""
+User Management Module
+
+This module is designed to manage users by providing functionalities such as:
+- Adding new users
+- Validating user credentials with passwords
+
+It uses MySQL for data management with the following structure:
+
+Database: users  
+Table: users  
+- id INT PRIMARY KEY AUTO_INCREMENT  
+- email VARCHAR(255) UNIQUE (used as username)  
+- password VARCHAR(255) (hashed using SHA-256 and encoded in UTF-8)  
+
+All passwords are securely hashed using SHA-256 and stored as UTF-8 encoded strings.
+
+Author: Mateo-rfz
+Date: 2025-02-28  
+License: GPL-3.0
+
+Dependencies:
+listed on requirements.txt (install with "pip install -r requirements.txt")
+- mysql-connector-python
+- hashlib
+
+Usage:
+    from user_module import add_user, validate_user
+
+    #add new user with email and password
+    userManager.AddUser("user@example.com", "password123").adduser()
+
+    #check user validation with email and password
+    userManager.CheckUserValidation("user@example.com", "password123").validationChecker()
+"""
+
+
+
+#use hash lib for hash passwords on database
 from hashlib import sha256
 
 import mysql.connector as mysql
 
 from modules import mainPageMetric
+
+#all database connection info on config.py
 from modules import config
 
 
