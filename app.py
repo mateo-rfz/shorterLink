@@ -162,6 +162,30 @@ def signup():
         
     else : 
         return render_template("signup.html")
+    
+
+
+
+
+
+
+@app.route("/deletelink/<string:shortLink>", methods=["POST"])
+def deleteLink(shortLink):
+    if not shortLink:
+        return render_template("notice.html", title="Error", text="Invalid link."), 400
+    
+    email = request.cookies.get("email")
+    registerKey = request.cookies.get("key")
+
+    if not registerKeyManager.KeyValidation(email, registerKey).checkValidation():
+        return render_template("login.html", title="Need to login", text="You need to login to remove a link."), 401
+
+    if urlManager.DelUrl(email, shortLink).delete():
+        return redirect(url_for("main"))
+    else:
+        return render_template("notice.html", title="Error", text="Permission denied or link does not exist."), 403
+
+
 
 
 
@@ -186,6 +210,7 @@ def contactus() :
 
 
 
+#statics
 
 
 
