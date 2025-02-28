@@ -78,6 +78,10 @@ DBPORT = config.DBPORT
 
 
 class _DbCreator : 
+    """
+    _DbCreator class
+    this class is only use for create database in Mysql 
+    """
     def createDB() : 
         conn = mysql.connect(host = HOST, 
                      user = DBUSERNAME , 
@@ -95,6 +99,23 @@ class _DbCreator :
 
 
 class AddUrl:
+    """
+    AddUrl class
+
+    This class is responsible for adding URLs to the database using the provided 
+    email, original link, and short link.
+
+    If shortLink is None, a random 5-character string will be generated as the short link.
+
+
+    Methods : 
+    - __checkUrlExistence -> bool : check url existence for if url existence return error.
+    - __createRandomShortLink -> string : Generates a random 5-character string to use as a shortLink.
+    - __createTable : use for create 'links' table in Mysql (IF NOT EXISTS).
+    - __addToDb -> bool : this method is use for push to database datas.
+    - add : the main method for this class use for return __addToDb answer.
+
+    """
     def __init__(self, email, originLink, shortLink=None):
         _DbCreator.createDB()
 
