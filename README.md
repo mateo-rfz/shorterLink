@@ -25,7 +25,7 @@ ShorterLink is a URL shortening web application built with Flask. It allows user
 ## 🏃 How to Run
 1. Clone the repository:
 ```bash
-$ git clone <repository-url>
+$ git clone git@github.com:mateo-rfz/shorterLink.git
 $ cd ShorterLink
 ```
 2. Set up a virtual environment and install dependencies:
