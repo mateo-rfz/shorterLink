@@ -205,17 +205,18 @@ class DelUrl:
     """
     DelUrl class
 
-    This class is responsible for Delete URLs to the database using the shortLink.
+    This class is responsible for deleting URLs from the database using the shortLink.
 
+    Methods:
+    - __checkShortLinkOwner(userEmail: str) -> bool:
+        Checks if the given userEmail matches the owner of the short link. 
+        Returns True if they match, otherwise False.
 
-    Methods : 
-    - __checkUrlExistence -> bool : check url existence for if url existence return error.
-    - __createRandomShortLink -> string : Generates a random 5-character string to use as a shortLink.
-    - __createTable : use for create 'links' table in Mysql (IF NOT EXISTS).
-    - __addToDb -> bool : this method is use for push to database datas.
-    - add : the main method for this class use for return __addToDb answer.
-
+    - delete(shortLink: str) -> bool:
+        Deletes the record associated with the given short link from the database.
+        Returns True if the deletion was successful, otherwise False.
     """
+
     def __init__(self, email : str , shortLink : str):
         _DbCreator.createDB()
         self.shortLink = shortLink
@@ -258,6 +259,24 @@ class DelUrl:
 
 
 class ShowUrlWithShortLink:
+    """
+    ShowUrlWithShortLink class
+
+    This class is responsible for finding the original link using the short link.
+    - If byEmail is False: returns only the original link.
+    - If byEmail is True: returns a tuple containing (id, email, originLink, shortLink).
+
+    Methods:
+    - __finder() -> tuple[bool, str]:
+        A private method that retrieves the original link based on the short link.
+        Returns a tuple where the first element indicates success (True/False),
+        and the second element contains the original link or an error message.
+
+    - show(byEmail: bool) -> str | tuple:
+        The main method of ShowUrlWithShortLink.
+        It calls __finder and formats the output depending on the value of byEmail.
+    """
+
     def __init__(self, shortLink , byEmail = False):
         _DbCreator.createDB()
         self.shortLink = shortLink
@@ -296,6 +315,24 @@ class ShowUrlWithShortLink:
 
 
 class ShortUrlWithEmail:
+    """
+    ShortUrlWithEmail class
+
+    This class is responsible for retrieving all short links associated with a given email from the database.
+
+    Methods:
+    - __init__(email: str):
+        Initializes the ShortUrlWithEmail instance by:
+        - Creating the database if it doesn't already exist using _DbCreator.
+        - Establishing a connection to the "links" database.
+        - Storing the provided email for later use.
+
+    - show() -> list | bool:
+        Queries the "links" table to fetch all records related to the given email.
+        - Returns a list of tuples containing the records if found.
+        - Returns False if no records are found or if an error occurs.
+    """
+
     def __init__(self, email):
         _DbCreator.createDB()
         
