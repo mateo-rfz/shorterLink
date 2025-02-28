@@ -132,9 +132,15 @@ class AddUrl:
 
         if shortLink is None:
             self.shortLink = self.__createRandomShortLink()
-        else:
-            self.shortLink = shortLink if not self.__checkUrlExistence(shortLink) else False
             self.shortLink = self.shortLink.lower()
+        else:
+            if not self.__checkUrlExistence(shortLink):
+                self.shortLink = shortLink
+                self.shortLink = self.shortLink.lower()
+            else:
+                self.shortLink = False
+
+            
 
 
     def __checkUrlExistence(self, targetUrl):
