@@ -143,11 +143,15 @@ class AddUrl:
         result = cursor.fetchone()
         return result is not None
 
+
+
     def __createRandomShortLink(self):
         while True:
             shortLink = "".join(random.choices(self.allchars, k=5))
             if not self.__checkUrlExistence(shortLink):
                 return shortLink
+
+
 
     def __createTable(self):
         
@@ -161,6 +165,8 @@ class AddUrl:
             )
         """)
         self.conn.commit()
+
+
 
     def __addToDb(self):
         self.__createTable()
@@ -189,22 +195,50 @@ class AddUrl:
 
 
 class DelUrl:
-    def __init__(self, shortLink):
+    """
+    DelUrl class
+
+    This class is responsible for Delete URLs to the database using the shortLink.
+
+
+    Methods : 
+    - __checkUrlExistence -> bool : check url existence for if url existence return error.
+    - __createRandomShortLink -> string : Generates a random 5-character string to use as a shortLink.
+    - __createTable : use for create 'links' table in Mysql (IF NOT EXISTS).
+    - __addToDb -> bool : this method is use for push to database datas.
+    - add : the main method for this class use for return __addToDb answer.
+
+    """
+    def __init__(self, email : str , shortLink : str):
         _DbCreator.createDB()
         self.shortLink = shortLink
+        self.email = email
+
         self.conn = mysql.connect(host=HOST,
                                    user=DBUSERNAME,
                                      password=DBPASSWORD,
                                        database="links")
+        
+    def __checkShortLinkOwner(self) :
+        urlOwnerEmail = ShowUrlWithShortLink(self.shortLink , byEmail = True).show()[1]
+        if urlOwnerEmail.lower() == (self.email).lower() :
+            return True
+        else : 
+            return False
+    
 
     def delete(self):
         try:
-            cursor = self.conn.cursor()
-            cursor.execute("DELETE FROM links WHERE shortLink = %s", (self.shortLink,))
-            self.conn.commit()
-            return True
+            if self.__checkShortLinkOwner() : 
+                cursor = self.conn.cursor()
+                cursor.execute("DELETE FROM links WHERE shortLink = %s", (self.shortLink,))
+                self.conn.commit()
+                return True
+            else : 
+                return False
+            
         except Exception as e:
-            return [False, e]
+            return False
         finally:
             self.conn.close()
 
@@ -217,23 +251,35 @@ class DelUrl:
 
 
 class ShowUrlWithShortLink:
-    def __init__(self, shortLink):
+    def __init__(self, shortLink , byEmail = False):
         _DbCreator.createDB()
         self.shortLink = shortLink
+        self.byEmail = byEmail
+
         self.conn = mysql.connect(host=HOST,
                                    user=DBUSERNAME,
                                      password=DBPASSWORD,
                                        database="links")
-
-    def show(self):
+        
+    def __finder(self) : 
         try:
             cursor = self.conn.cursor()
-            cursor.execute("SELECT originLink FROM links WHERE shortLink = %s", (self.shortLink,))
+            cursor.execute("SELECT * FROM links WHERE shortLink = %s", (self.shortLink,))
             result = cursor.fetchone()
             self.conn.close()
-            return result[0] if result else False
+            return result if result else False
         except Exception as e:
             return False
+
+
+    def show(self):
+        if self.byEmail :
+            return self.__finder()
+        else : 
+            try : 
+                return self.__finder()[2]
+            except Exception : 
+                return False
 
 
 

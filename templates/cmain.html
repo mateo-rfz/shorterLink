@@ -27,7 +27,8 @@
                     <tr>
                         <th class="border border-gray-700 p-2 sm:p-3 w-1/4 min-w-[120px]">Short Link</th>
                         <th class="border border-gray-700 p-2 sm:p-3 w-1/2 min-w-[200px]">Original Link</th>
-                        <th class="border border-gray-700 p-2 sm:p-3 w-1/4 min-w-[100px]">Views</th>
+                        <th class="border border-gray-700 p-2 sm:p-3 w-1/6 min-w-[80px]">Views</th>
+                        <th class="border border-gray-700 p-2 sm:p-3 w-1/6 min-w-[80px] text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-700">
@@ -40,6 +41,13 @@
                             <a href="{{ link[1] }}" target="_blank" class="text-blue-400 hover:underline">{{ link[1] }}</a>
                         </td>
                         <td class="border border-gray-600 p-2 sm:p-3">{{ link[2] }}</td>
+                        <td class="border border-gray-600 p-2 sm:p-3 text-center">
+                            <form action="{{ url_for('deleteLink', shortLink=link[0]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this link?');">
+                                <button type="submit">
+                                    <img src="{{ url_for('static', filename='removePic.png') }}" alt="Delete" class="w-6 h-6 inline-block">
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
