@@ -1,8 +1,53 @@
+"""
+Register Key Manager modules
+
+This module is designed to manage register keys by providing functionalities such as:
+- Add a new register key associated with an email
+- Validate a register key for a given email
+
+Database:
+- MySQL (Database: rKeys, Table: users)
+
+It links MySQL for data management with the following structure:
+
+Database: rKeys  
+Table: users  
+Columns:  
+ - id (INT, PRIMARY KEY, AUTO_INCREMENT)  
+ - email (VARCHAR(255), UNIQUE)  
+ - rk (VARCHAR(400)) — Register key
+
+Author: Mateo-rfz  
+Date: 2025-02-28  
+License: GPL-3.0
+
+Dependencies:  
+listed on requirements.txt (install with "pip install -r requirements.txt")  
+- mysql-connector-python  
+- random  
+- string  
+- hashlib
+
+Usage:
+    from modules import registerKeyManager
+
+    # Add a new register key associated with an email
+    registerKeyManager.AddRegisterKey(email).registerKey()
+
+    # Validate a register key for a given email
+    registerKeyManager.KeyValidation(email, registerKey).checkValidation()
+"""
+
+
+
 from hashlib import sha256
 import random
 import string
+# this modules use for create random register key
+
 import mysql.connector as mysql
 
+#all database connection info on config.py
 from modules import config
 
 
