@@ -26,7 +26,7 @@ listed on requirements.txt (install with "pip install -r requirements.txt")
 - hashlib
 
 Usage:
-    from user_module import add_user, validate_user
+    from modules import userManager
 
     #add new user with email and password
     userManager.AddUser("user@example.com", "password123").adduser()
