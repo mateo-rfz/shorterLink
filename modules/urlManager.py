@@ -116,7 +116,7 @@ class AddUrl:
     - add : the main method for this class use for return __addToDb answer.
 
     """
-    def __init__(self, email, originLink, shortLink=None):
+    def __init__(self, email : str , originLink : str , shortLink=None):
         _DbCreator.createDB()
 
         self.conn = mysql.connect(host=HOST,
@@ -126,7 +126,7 @@ class AddUrl:
 
 
 
-        self.email = email
+        self.email = email.lower()
         self.originLink = originLink
         self.allchars = string.ascii_letters + string.digits
 
@@ -134,6 +134,7 @@ class AddUrl:
             self.shortLink = self.__createRandomShortLink()
         else:
             self.shortLink = shortLink if not self.__checkUrlExistence(shortLink) else False
+            self.shortLink = self.shortLink.lower()
 
 
     def __checkUrlExistence(self, targetUrl):
