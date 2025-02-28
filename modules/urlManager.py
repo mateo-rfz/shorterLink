@@ -1,9 +1,67 @@
+"""
+URL Manager Module
+
+This module is designed to manage URLs by providing functionalities such as:
+- Adding a new SHORT-URL + ORIGIN-URL
+- Deleting a SHORT-URL + ORIGIN-URL
+- Searching for OriginUrl with ShortUrl
+- Searching for OriginUrl and ShortUrl with Email
+
+Database:
+- MySQL (Database: links, Table: users)
+
+It links MySQL for data management with the following structure:
+
+Database: links  
+Table: users  
+- id INT PRIMARY KEY AUTO_INCREMENT,
+- email VARCHAR(255),
+- originLink TEXT,
+- shortLink VARCHAR(255) UNIQUE
+
+
+Author: Mateo-rfz
+Date: 2025-02-28  
+License: GPL-3.0
+
+Dependencies:
+listed on requirements.txt (install with "pip install -r requirements.txt")
+- mysql-connector-python
+- random
+- string
+
+Usage:
+    from modules import urlManager
+
+    #add new url with email originLink and shortLink
+    urlManager.AddUrl(email , originLink , shortLink).add()
+
+    #delete url with shortLink
+    urlManager.DelUrl(shortLink).delete()
+
+    #find the origin url with shortLink
+    urlManager.ShowUrlWithShortLink(shortLink).show()
+
+    #find the origin url + short url with email
+    urlManager.ShortUrlWithEmail(email).show()
+"""
+
+
+
+
+
+#use random and string for create random shortLink
 import random
-import mysql.connector as mysql
 import string
+
+
+import mysql.connector as mysql
+
 
 from modules import metricManager
 from modules import mainPageMetric
+
+#all database connection info on config.py
 from modules import config
 
 
