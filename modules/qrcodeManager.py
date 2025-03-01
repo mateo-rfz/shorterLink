@@ -33,8 +33,8 @@ class CreateQrCode :
             
             return self.url
         
-        except Exception : 
-            return False
+        except Exception as e : 
+            return e
         
 
 
