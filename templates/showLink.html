@@ -26,6 +26,17 @@
             <div class="flex flex-col sm:flex-row items-center sm:space-x-2 bg-gray-800 p-4 rounded-lg border border-gray-600 w-full">
                 <a href="{{ link }}" target="_blank" id="shortLink" class="text-blue-400 hover:text-blue-500 break-all w-full text-center sm:text-left">{{ link }}</a>
             </div>
+            <br>
+
+            <div>
+                <img src="{{ url_for('qrcode', shortUrl=link) }}" alt="QR Code">
+            </div>
+            <div>
+                <a href="{{ url_for('downloadQrCode', shortUrl=link) }}" class="block bg-blue-600 hover:bg-blue-500 text-white text-center p-4 rounded-lg transition duration-300 mt-4">
+                    ⬇️ Download QR Code
+                </a>
+            </div>
+            
 
             <!-- Link to Create Link Page -->
             <div class="mt-4 w-full">
