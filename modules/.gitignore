@@ -1,2 +1,4 @@
 config.py
 test.py
+*.db
+test*
