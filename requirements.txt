@@ -1,2 +1,4 @@
 flask
 mysql-connector-python
+qrcode
+redis
