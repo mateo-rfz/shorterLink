@@ -1,10 +1,10 @@
-from flask import Flask , render_template , request , redirect , url_for , send_file , make_response 
+from flask import Flask , render_template , request , abort , redirect , url_for , send_file , make_response 
 
 #import socket for find local ip    
 import socket
-
+import io
 from modules import metricManager ,urlManager ,registerKeyManager ,mainPageMetric, userManager
-
+from modules import qrcodeManager
 
 app = Flask(__name__)
 
@@ -191,6 +191,50 @@ def deleteLink(shortLink):
 
 
 
+@app.route("/qrcode/<string:shortUrl>")
+def qrcode(shortUrl):
+    DOMAIN = request.host
+    url =  DOMAIN + "/" + shortUrl
+
+    qrcodeManager.CreateQrCode(url).create()
+
+    qr_data = qrcodeManager.fetchQrCode(url).fetch()
+    
+    if not qr_data:
+        return abort(404, description="WE CANT FIND THIS QRCODE")
+
+    return send_file(
+        io.BytesIO(qr_data),
+        mimetype='image/png',
+        as_attachment=False,
+        download_name=f'{url}.png'
+    )
+
+
+
+@app.route("/dqrcode/<string:shortUrl>")
+def downloadQrCode(shortUrl) : 
+    DOMAIN = request.host
+    url =  DOMAIN + "/" + shortUrl
+
+    qrcodeManager.CreateQrCode(url).create()
+
+    qr_data = qrcodeManager.fetchQrCode(url).fetch()
+    
+    if not qr_data:
+        return abort(404, description="WE CANT FIND THIS QRCODE")
+
+    return send_file(
+        io.BytesIO(qr_data),
+        mimetype='image/png',
+        as_attachment=True,
+        download_name=f'{url}.png'
+    )
+
+
+
+
+
 #main page api
 @app.route("/policy" , methods = ["GET"])
 def policy() : 
@@ -208,9 +252,6 @@ def contactus() :
 
 
 
-
-
-#statics
 
 
 
