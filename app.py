@@ -193,8 +193,10 @@ def deleteLink(shortLink):
 @app.route("/qrcode/<string:shortUrl>")
 def qrcode(shortUrl):
     url = f"{request.host_url}{shortUrl}"
+    print(url)
 
-    qrcodeManager.CreateQrCode(url).create()
+    cr = qrcodeManager.CreateQrCode(url).create()
+    print(cr)
 
     qr_data = qrcodeManager.fetchQrCode(url).fetch()
     
