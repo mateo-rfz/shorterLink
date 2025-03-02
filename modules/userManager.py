@@ -47,6 +47,8 @@ from modules import mainPageMetric
 #all database connection info on config.py
 from modules import config
 
+import string
+
 
 
 HOST = config.HOST
@@ -90,6 +92,7 @@ class AddUser :
     methods : 
     - __passHasher : use for hash passwords
     - __createTable : use for create 'users' table in Mysql (IF NOT EXISTS)
+    - __passwordSecurityChecker : use for check security off password (lenght + use digits + use letters)
     - adduser is main method in AddUser class for add user
     """
     def __init__(self , email , password) : 
@@ -121,16 +124,55 @@ class AddUser :
                 password VARCHAR(255)
             )
         """)
+
+
+    def __passwordSecurityChecker(self , password : str) : 
+        password = password.replace(" " , "")
+        if len(password) < 5 : 
+            return "WEAKPASS"
+        
+        numChecker = 0
+        letterChecker = False
+
+        digits = (string.digits).replace("" , " ").split()
+        letters = (string.ascii_letters).replace("" , " ").split()
+
+        for char in password : 
+            if char in digits : 
+                numChecker =+ 1
+            elif char in letters : 
+                letterChecker = True
+
+        if  numChecker and letterChecker > 4 :
+            return "WEAKPASS"
+        else : 
+            return True 
         
 
 
     def adduser(self) : 
         try : 
+
             self.__createTable()
+            
+
 
             cursor = (self.conn).cursor()
             cursor.execute("INSERT INTO users(email , password)  VALUES(%s , %s)" , 
                         (self.email , self.__passHasher()))
+            
+
+            """
+            we add this checker after INSERT on database
+            and before commit data on data base
+            for check email exists with database and if exists rais error 
+            else check security of password and if security of password is ok 
+            commit the data
+            """
+            
+            if self.__passwordSecurityChecker(self.password) : 
+                return "WEAKPASS"
+            
             (self.conn).commit()
             (self.conn).close()
 
@@ -138,9 +180,9 @@ class AddUser :
 
             return True
         except mysql.IntegrityError : 
-            return [False , "userExists"]
+            return False
         except Exception as e : 
-            return [False , e]
+            False
         
 
 
