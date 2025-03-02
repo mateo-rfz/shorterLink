@@ -78,9 +78,9 @@ DBPORT = config.DBPORT
 
 
 class _DbCreator : 
-    """
+ this c   """
     _DbCreator class
-    this class is only use for create database in Mysql 
+    lass is only use for create database in Mysql 
     """
     def createDB() : 
         conn = mysql.connect(host = HOST, 

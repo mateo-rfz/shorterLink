@@ -11,7 +11,7 @@ Database:
 It links MySQL for data management with the following structure:
 
 Database: rKeys  
-Table: users  
+Table: rKeys  
 Columns:  
  - id (INT, PRIMARY KEY, AUTO_INCREMENT)  
  - email (VARCHAR(255), UNIQUE)  
@@ -64,6 +64,10 @@ DBPORT = config.DBPORT
 
 
 class _DbCreator: 
+    """
+    _DbCreator class
+    this class is only use for create database in Mysql 
+    """
     def createDB(self): 
         conn = mysql.connect(
             host=HOST, 
@@ -82,6 +86,24 @@ class _DbCreator:
 
 
 class AddRegisterKey:
+    """
+    AddRegisterKey Class
+
+    This class is responsible for generating a random registration key associated with an email.
+    
+    What is a registration key?
+    - A registration key is used to set login cookies for clients.
+
+    Methods:
+    - __init__(email: str): Initializes the class, creates the database if it doesn’t exist, and sets up a random registration key.
+    - __passHasher(chars: str) -> str: Generates a SHA-256 hash from the given characters.
+    - __createTable() -> None: Creates the 'rKeys' table in the database if it doesn’t already exist.
+    - __checkKeyExistence() -> bool: Checks if a registration key already exists for the given email.
+    - __updateTheLastKey() -> bool: Updates the existing registration key in the database if the email already has an entry.
+    - __setKey() -> bool: Inserts a new registration key into the database if no entry exists for the given email.
+    - registerKey() -> str: Manages the registration process by checking key existence and either updating or inserting the key. Returns the final registration key.
+    """
+
     def __init__(self, email):
         _DbCreator().createDB()
         self.email = email
@@ -189,7 +211,26 @@ class AddRegisterKey:
 
 
 
+
+
+
+
+
+
+
+
+
+
 class KeyValidation:
+    """
+    KeyValidation Class
+
+    This class is responsible for validating registration keys associated with emails.
+
+    Methods:
+    - __init__(email: str, key: str): Initializes the database connection and sets the email and key for validation.
+    - checkValidation() -> bool: Validates the registration key by checking if the provided email-key pair exists in the database.
+    """
     def __init__(self, email, key):
         _DbCreator().createDB()
         self.email = email
