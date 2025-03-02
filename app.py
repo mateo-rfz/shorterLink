@@ -155,11 +155,16 @@ def signup():
             resp = make_response(redirect(url_for('createLink')))
             #the expiration for cookies is 7 days
             resp.set_cookie('email', email , max_age=60*60*24*7)  
-            resp.set_cookie('key', registerKey , max_age=60*60*24*7)  
+            resp.set_cookie('key', registerKey , max_age=60*60*24*7) 
             return resp
-        else : 
+    
+        elif not o :
             return render_template("signup.html" , title = "Error" , text = "An account with this email already exists.")
         
+        elif o == "WEAKPASS" : 
+            return render_template("signup.html" , title = "Weak password" , text = "Your password is weak use a-z , 0-9")
+
+
     else : 
         return render_template("signup.html")
     
