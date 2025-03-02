@@ -13,6 +13,10 @@ DBNAME = "metrix"
 
 
 class _DbCreator : 
+    """
+    _DbCreator class
+    this class is only use for create database in Mysql 
+    """
     def createDB() : 
         conn = mysql.connect(host = HOST, 
                      user = DBUSERNAME , 
