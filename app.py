@@ -162,7 +162,7 @@ def signup():
             return render_template("signup.html" , title = "Error" , text = "An account with this email already exists.")
         
         elif o == "WEAKPASS" : 
-            return render_template("signup.html" , title = "Weak password" , text = "Your password is weak use a-z , 0-9")
+            return render_template("signup.html" , title = "Weak password" , text = "Your password is weak use Number and Letters")
 
 
     else : 
