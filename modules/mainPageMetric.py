@@ -1,3 +1,53 @@
+"""
+main Page metric Module
+
+This module is designed to manage show view , link creators , active users:
+- add counter for show view and link creators and active users
+- show metric of view and link creators and active users
+
+Database:
+- MySQL (Database: mainPmetrix, Table: linksCounter , viewsCounter , usersCounter)
+
+It links MySQL for data management with the following structure:
+
+Database: mainPmetrix  
+Table: linksCounter  
+- id INT PRIMARY KEY AUTO_INCREMENT,
+- count INT DEFAULT 0
+
+
+Table: viewsCounter
+- id INT PRIMARY KEY AUTO_INCREMENT,
+- count INT DEFAULT 0
+
+
+Table: usersCounter
+- id INT PRIMARY KEY AUTO_INCREMENT,
+- count INT DEFAULT 0
+
+
+
+Author: Mateo-rfz
+Date: 2025-03-02
+License: GPL-3.0
+
+Dependencies:
+Listed in requirements.txt (install with "pip install -r requirements.txt")
+- mysql-connector-python
+
+Usage:
+    from modules import mainPageMetric
+
+    # add new link metric
+    mainPageMetric.LinksCounter().addToLinkCounter()
+
+    # add new views metric
+    mainPageMetric.Views(ip).addToViewsCounter()
+
+    #add new users metric
+    mainPageMetric.Users().addToUsersCounter()
+"""
+
 from modules import config , viewManager
 
 import mysql.connector as mysql
@@ -16,6 +66,10 @@ DBPORT = config.DBPORT
 
 
 class _DbCreator : 
+    """
+    _DbCreator class
+    this class is only use for create database in Mysql 
+    """
     def createDB() : 
         conn = mysql.connect(host = HOST, 
                      user = DBUSERNAME , 
