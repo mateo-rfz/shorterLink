@@ -1,3 +1,5 @@
+
+#___________________________________________________Mysql
 HOST = "localhost"
 DBUSERNAME = "root"
 DBPASSWORD = "root"
@@ -5,7 +7,7 @@ DBPASSWORD = "root"
 #Default mysql port is 3306
 DBPORT = 3306
 
-
+#___________________________________________________REDIS
 
 #REDIS
 REDISHOST = "localhost"

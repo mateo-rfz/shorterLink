@@ -1,6 +1,36 @@
+"""
+View Management Module
+
+This module is responsible for managing and storing IP-based view records in a MySQL database. 
+It includes functionalities for creating databases and tables, and adding or updating view records.
+
+Database:
+- Database name: views
+- Table: views (id, ip, time)
+
+Classes:
+- Database: Handles database creation and connection.
+- ViewMng: Manages IP-based view records, ensuring duplicate IPs are updated rather than re-inserted.
+
+Author: Mateo-rfz
+Date: 2025-03-02
+License: GPL-3.0
+
+Dependencies:
+- mysql-connector-python
+- datetime
+
+Usage:
+    from modules import viewManager
+
+    view = ViewMng(ip="192.168.1.1").adder()
+"""
+
+
 import mysql.connector as mysql
 from datetime import datetime
 
+#all database connection info on config.py
 from modules import config
 
 
@@ -22,6 +52,10 @@ DBPORT = config.DBPORT
 
 
 class Database:
+    """ 
+    _DbCreator class
+    lass is only use for create database in Mysql 
+    """
     def __init__(self, dbName="views"):
         self.dbName = dbName
         self.createDB()
@@ -51,7 +85,23 @@ class Database:
 
 
 
+
+
+
+
+
 class ViewMng:
+    """
+    ViewMng Class
+
+    Manages IP-based view records in the 'views' table. 
+
+    Methods:
+    - __init__(ip: str): Initializes the class, establishes a database connection, and creates the 'views' table if it doesn't exist.
+    - __createTable() -> None: Creates the 'views' table with columns for id, ip, and time.
+    - adder() -> bool: Adds a new view record or updates the timestamp for an existing IP. 
+                       Prevents adding duplicate records within a 60-second timeframe.
+    """
     def __init__(self, ip):
         self.ip = ip
         self.conn = Database().connect()
