@@ -121,14 +121,14 @@ class AddUser :
             CREATE TABLE IF NOT EXISTS users(
                 id INT PRIMARY KEY AUTO_INCREMENT ,
                 email VARCHAR(255) UNIQUE,
-                password VARCHAR(255)
+                password VARCHAR(300)
             )
         """)
 
 
-    def __passwordSecurityChecker(self , password : str) : 
-        password = password.replace(" " , "")
-        if len(password) < 5 : 
+    def __passwordSecurityChecker(self , passwd : str) : 
+        passwd = passwd.replace(" " , "")
+        if len(passwd) < 5 : 
             return "WEAKPASS"
         
         numChecker = 0
@@ -137,7 +137,7 @@ class AddUser :
         digits = (string.digits).replace("" , " ").split()
         letters = (string.ascii_letters).replace("" , " ").split()
 
-        for char in password : 
+        for char in passwd : 
             if char in digits : 
                 numChecker =+ 1
             elif char in letters : 
@@ -170,7 +170,7 @@ class AddUser :
             commit the data
             """
             
-            if self.__passwordSecurityChecker(self.password) : 
+            if not self.__passwordSecurityChecker(self.password) : 
                 return "WEAKPASS"
             
             (self.conn).commit()
@@ -251,3 +251,64 @@ class CheckUserValidation:
 
     def validationChecker(self):
         return self.__userExistenceChecker()
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ChangeUserPassword : 
+    def __init__(self , email : str , oldPassword : str , newPassword : str) -> bool : 
+        self.email = email 
+        self.oldPassword = oldPassword
+        self.newPassword = newPassword
+        self.hashNewPassword = self.__passHasher()
+
+
+
+        self.conn = mysql.connect(host = HOST, 
+                     user = DBUSERNAME , 
+                     password = DBPASSWORD , 
+                     database = "users")
+        
+
+    def __passHasher(self) : 
+        return (sha256((self.newPassword).encode('utf-8')).hexdigest())
+        
+
+
+    
+    def __checkValidation(self) : 
+        try : 
+            o = CheckUserValidation(self.email , self.oldPassword).validationChecker()
+            if o : 
+                cursor = (self.conn).cursor()
+                cursor.execute("""UPDATE users SET password = %s WHERE email = %s""" , (self.hashNewPassword , self.email,))
+                (self.conn).commit()
+            else :
+                return False
+
+            return True
+        
+        except Exception  as e: 
+            return e
+        
+        finally : 
+            (self.conn).close()
+        
+
+
+    def changePass(self) : 
+        return self.__checkValidation()
+
+            
