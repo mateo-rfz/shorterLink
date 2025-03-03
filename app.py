@@ -24,6 +24,8 @@ from modules import userManager
 #import qrcodeManager for create qrcode , push them to redis and fetch them from memory
 from modules import qrcodeManager
 
+#import logger for write logs
+from modules import logger
 
 
 app = Flask(__name__)
@@ -52,6 +54,7 @@ def main():
     registerKey = request.cookies.get("key")
 
     if registerKeyManager.KeyValidation(email , registerKey).checkValidation() is True : 
+        logger.Logger("request to home page(logged user)" , request.remote_addr , email).logWriter()
         links = []
         """
         this section: 
@@ -69,7 +72,8 @@ def main():
         
         return render_template("cmain.html" , email = email , links = links)
 
-    else :
+    else :      
+        logger.Logger("request to home page(guest user)" , request.remote_addr , email).logWriter()
         """
         This is the public home page for users
           who have not signed in to ShorterLink
@@ -89,14 +93,21 @@ def main():
 
 @app.route("/<string:shortLink>" , methods = ["GET"])
 def redirectPage(shortLink) : 
+    email = request.cookies.get("email")
+
     origin = urlManager.ShowUrlWithShortLink(shortLink).show()
+    logger.Logger("request to short link redirector page" , request.remote_addr , email).logWriter()
 
     if origin : 
         # add view for wanted link if exists
         metricManager.AddView(shortLink).addView()
+        logger.Logger(f"redirect to {origin} with {shortLink}" , request.remote_addr , email).logWriter()
+
         return redirect(origin)
     else : 
         return render_template("notice.html" ,title = "Wrong page" , text = "we cant find this page on database") 
+        
+
         
 
 
@@ -105,6 +116,9 @@ def redirectPage(shortLink) :
 
 @app.route("/createlink" , methods = ["GET" , "POST"])
 def createLink() : 
+
+    logger.Logger("request to create shortLink" , request.remote_addr , email).logWriter()
+
     if request.method == "POST" : 
         email = request.cookies.get("email")
         registerKey = request.cookies.get("key")
@@ -121,11 +135,14 @@ def createLink() :
 
         if shortLink == None : 
             shortURL = urlManager.AddUrl(email , originLink).add()
+            logger.Logger(f"create shortLink for {originLink}" , request.remote_addr , email).logWriter()
+
             return render_template("showLink.html" , title = "Your link created" , link = shortURL)
         else : 
 
             shortURL = urlManager.AddUrl(email , originLink , shortLink).add()
-            
+            logger.Logger(f"create shortLink for {originLink} with {shortLink}" , request.remote_addr , email).logWriter()
+
             if not shortURL : 
                 return render_template("createLink.html" , title = "URL USED" , text = "url used by another user")
             else : 
@@ -162,6 +179,8 @@ def login() :
        if not o : 
             return render_template("login.html", title = "WRONG" , text = "your username or password is wrong")
        else : 
+            logger.Logger(f"user logged in" , request.remote_addr , email).logWriter()
+
             registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
             #redirect to home page after set cookies
             resp = make_response(redirect(url_for('main')))
@@ -182,6 +201,9 @@ def login() :
        email = request.cookies.get("email")
        registerKey = request.cookies.get("key")
 
+       logger.Logger(f"request for login page" , request.remote_addr , email).logWriter()
+
+
        if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
             return render_template("login.html", title = f"You are already logged in" , 
                                    text = f"You are already logged in as {email}" ,
@@ -189,6 +211,8 @@ def login() :
                                    )
     
        return render_template("login.html")
+
+
 
 
 
@@ -217,6 +241,8 @@ def signup():
 
         o = userManager.AddUser(email , password).adduser()
         if o == 300: 
+            logger.Logger(f"user sginup" , request.remote_addr , email).logWriter()
+
             registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
             #redirect to create link page after set cookies
             resp = make_response(redirect(url_for('createLink')))
@@ -239,6 +265,9 @@ def signup():
         email = request.cookies.get("email")
         registerKey = request.cookies.get("key")
 
+        logger.Logger(f"request for signup page" , request.remote_addr , email).logWriter()
+
+
         if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
             return render_template("signup.html", title = f"You are already logged in" , 
                                    text = f"You are already logged in as {email}" ,
@@ -247,6 +276,8 @@ def signup():
         
         return render_template("signup.html")
     
+
+
 
 
 
@@ -270,6 +301,8 @@ def resetPass() :
 
             #set new register key for new login
             registerKeyManager.AddRegisterKey(email).registerKey()
+            logger.Logger(f"user change password" , request.remote_addr , email).logWriter()
+
 
             return render_template("login.html" , title = "Success" , text = "your password was changed" , color = "green")
 
@@ -277,7 +310,11 @@ def resetPass() :
             return render_template("login.html", title = "Need to login" , text = "For change password you need to login first")
         
     else :
+        logger.Logger(f"request for reset pass page" , request.remote_addr , email).logWriter()
+
         return render_template("resetpass.html")
+
+
 
 
 
@@ -293,6 +330,9 @@ def deleteLink(shortLink):
     email = request.cookies.get("email")
     registerKey = request.cookies.get("key")
 
+    logger.Logger(f"request for delete {shortLink}" , request.remote_addr , email).logWriter()
+
+
     if not registerKeyManager.KeyValidation(email, registerKey).checkValidation():
         return render_template("login.html", title="Need to login", text="You need to login to remove a link."), 401
 
@@ -306,11 +346,16 @@ def deleteLink(shortLink):
 
 
 
+
+
 @app.route("/qrcode/<string:shortUrl>")
 def qrcode(shortUrl):
 
     email = request.cookies.get("email")
     registerKey = request.cookies.get("key")
+
+    logger.Logger(f"request qrcode for {shortUrl}" , request.remote_addr , email).logWriter()
+
 
     if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
         return render_template("login.html", title="Need to login", text="You need to login"), 401
@@ -339,10 +384,14 @@ def qrcode(shortUrl):
 
 
 
+
+
 @app.route("/dqrcode/<string:shortUrl>")
 def downloadQrCode(shortUrl): 
     email = request.cookies.get("email")
     registerKey = request.cookies.get("key")
+
+    logger.Logger(f"download qrcode shortLink {shortUrl}" , request.remote_addr , email).logWriter()
 
     if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
         return render_template("login.html", title="Need to login", text="You need to login"), 401
@@ -369,10 +418,14 @@ def downloadQrCode(shortUrl):
 
 
 
+
+
 @app.route("/profile")
 def profile() : 
     email = request.cookies.get("email")
     registerKey = request.cookies.get("key")
+
+    logger.Logger(f"request to profile page" , request.remote_addr , email).logWriter()
 
     if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
         return render_template("login.html", title="Need to login", text="You need to login to access to profile"), 401
@@ -384,8 +437,12 @@ def profile() :
 
 
 
+
 @app.route("/logout")
 def logout() : 
+    email = request.cookies.get("email")
+    logger.Logger(f"logout" , request.remote_addr , email).logWriter()
+
     response = make_response(redirect(url_for("login")))
     response.delete_cookie('key')
     return response
@@ -393,19 +450,30 @@ def logout() :
 
 
 
+
+
 #main page api for policy and about and contactus
 @app.route("/policy" , methods = ["GET"])
 def policy() : 
+    email = request.cookies.get("email")
+    logger.Logger(f"request to policy page" , request.remote_addr , email).logWriter()
+
     return render_template("policy.html")
 
 
 @app.route("/about" , methods = ["GET"])
 def about() : 
+    email = request.cookies.get("email")
+    logger.Logger(f"request to about page" , request.remote_addr , email).logWriter()
+
     return render_template("about.html")
 
 
 @app.route("/contactus" , methods = ["GET"])
 def contactus() : 
+    email = request.cookies.get("email")
+    logger.Logger(f"request to contactus page" , request.remote_addr , email).logWriter()
+
     return render_template("contactus.html")
 
 
