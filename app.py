@@ -234,7 +234,7 @@ def resetPass() :
             #set new register key for new login
             registerKeyManager.AddRegisterKey(email).registerKey()
 
-            return render_template("resetpass.html" , title = "Success" , text = "your password was changed" , color = "green")
+            return render_template("login.html" , title = "Success" , text = "your password was changed" , color = "green")
 
         else : 
             return render_template("login.html", title = "Need to login" , text = "For change password you need to login first")
