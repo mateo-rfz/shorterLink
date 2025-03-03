@@ -213,6 +213,32 @@ def signup():
 
 
 
+@app.route("/resetpass" , methods = ["GET" , "POST"])
+def resetPass() :
+    if request.method == "POST" : 
+        email = request.cookies.get("email")
+        registerKey = request.cookies.get("key")
+
+        if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+            oldPassword = request.form.get("oldPassword")
+            newPassword = request.form.get("newPassword")
+            #set new register key for new login
+            registerKeyManager.AddRegisterKey(email).registerKey()
+
+            userManager.ChangeUserPassword(email , oldPassword , newPassword).changePass()
+
+        else : 
+            return render_template("login.html", title = "Need to login" , text = "For change password you need to login first")
+        
+    else :
+        return render_template("resetpass.html")
+
+
+
+
+
+
+
 @app.route("/deletelink/<string:shortLink>", methods=["POST"])
 def deleteLink(shortLink):
     if not shortLink:
