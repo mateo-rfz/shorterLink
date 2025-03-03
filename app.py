@@ -117,6 +117,7 @@ def redirectPage(shortLink) :
 @app.route("/createlink" , methods = ["GET" , "POST"])
 def createLink() : 
 
+    email = request.cookies.get("email")
     logger.Logger("request to create shortLink" , request.remote_addr , email).logWriter()
 
     if request.method == "POST" : 
@@ -310,6 +311,7 @@ def resetPass() :
             return render_template("login.html", title = "Need to login" , text = "For change password you need to login first")
         
     else :
+        email = request.cookies.get("email")
         logger.Logger(f"request for reset pass page" , request.remote_addr , email).logWriter()
 
         return render_template("resetpass.html")
@@ -487,4 +489,4 @@ def contactus() :
 if (__name__) == ("__main__") : 
     app.run(host=socket.gethostbyname(socket.gethostname()) ,
              port=80 ,
-               debug=True)
+               debug=False)
