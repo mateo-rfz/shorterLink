@@ -21,6 +21,8 @@ ShorterLink is a URL shortening web application built with Flask. It allows user
 - **Security**:
   - Basic authentication with cookie-based session management.
   - Validation for link ownership before deletion.
+-  **Caching**:
+  - Redis caching to optimize link redirection and view count operations.
 
 ## 🏃 How to Run
 1. Clone the repository:
@@ -69,3 +71,8 @@ This project is licensed under the GPL-3.0 License.
 
 Happy shortening! ✂️
 
+
+
+
+![ShorterLink Screenshot](.github/pic2.png)
+![ShorterLink Screenshot](.github/pic3.png)
