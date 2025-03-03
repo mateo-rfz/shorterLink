@@ -1,31 +1,27 @@
 """
 main Page metric Module
 
-This module is designed to manage show view , link creators , active users:
-- add counter for show view and link creators and active users
-- show metric of view and link creators and active users
+This module is designed to manage show view, link creators, and active users:
+- Add counter for show view, link creators, and active users.
+- Show metrics of views, link creators, and active users.
 
 Database:
-- MySQL (Database: mainPmetrix, Table: linksCounter , viewsCounter , usersCounter)
+- MySQL (Database: mainPmetrix, Tables: linksCounter, viewsCounter, usersCounter)
 
-It links MySQL for data management with the following structure:
+Database Structure:
+- Database: mainPmetrix
 
-Database: mainPmetrix  
-Table: linksCounter  
-- id INT PRIMARY KEY AUTO_INCREMENT,
-- count INT DEFAULT 0
+  Table: linksCounter
+  - id INT PRIMARY KEY AUTO_INCREMENT,
+  - count INT DEFAULT 0
 
+  Table: viewsCounter
+  - id INT PRIMARY KEY AUTO_INCREMENT,
+  - count INT DEFAULT 0
 
-Table: viewsCounter
-- id INT PRIMARY KEY AUTO_INCREMENT,
-- count INT DEFAULT 0
-
-
-Table: usersCounter
-- id INT PRIMARY KEY AUTO_INCREMENT,
-- count INT DEFAULT 0
-
-
+  Table: usersCounter
+  - id INT PRIMARY KEY AUTO_INCREMENT,
+  - count INT DEFAULT 0
 
 Author: Mateo-rfz
 Date: 2025-03-02
@@ -38,13 +34,13 @@ Listed in requirements.txt (install with "pip install -r requirements.txt")
 Usage:
     from modules import mainPageMetric
 
-    # add new link metric
+    # Add new link metric
     mainPageMetric.LinksCounter().addToLinkCounter()
 
-    # add new views metric
+    # Add new views metric
     mainPageMetric.Views(ip).addToViewsCounter()
 
-    #add new users metric
+    # Add new users metric
     mainPageMetric.Users().addToUsersCounter()
 """
 
@@ -87,6 +83,11 @@ class _DbCreator :
 
 
 class Database:
+    """
+    Database class
+    This class manages the connection to the MySQL database 'mainPmetrix'.
+    It ensures the database is created and provides a method to establish a connection.
+    """
     def __init__(self, dbName="mainPmetrix"):
         _DbCreator.createDB()
         self.dbName = dbName
@@ -107,6 +108,11 @@ class Database:
 
 
 class LinksCounter:
+    """
+    LinksCounter class
+    This class manages the 'linksCounter' table in the 'mainPmetrix' database.
+    It initializes the table, increments the link count, and retrieves the current count.
+    """
     def __init__(self):
         self.db = Database()
         self.__createTable()
@@ -154,6 +160,11 @@ class LinksCounter:
 
 
 class Views:
+    """
+    Views class
+    This class manages the 'viewsCounter' table in the 'mainPmetrix' database.
+    It initializes the table, increments the view count, and retrieves the current count.
+    """
     def __init__(self , ip = "127.0.0.1"):
         self.db = Database()
         self.__createTable()
@@ -212,6 +223,11 @@ class Views:
 
 
 class Users:
+    """
+    Users class
+    This class manages the 'usersCounter' table in the 'mainPmetrix' database.
+    It initializes the table, increments the user count, and retrieves the current count.
+    """
     def __init__(self):
         self.db = Database()
         self.__createTable()
