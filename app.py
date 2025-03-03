@@ -148,6 +148,13 @@ def createLink() :
 @app.route("/login" , methods = ["GET" , "POST"])
 def login() : 
     if request.method == "POST" : 
+       email = request.cookies.get("email")
+       registerKey = request.cookies.get("key")
+
+       if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+            return render_template("login.html", title = f"You are already logged in" , text = f"You are already logged in as {email}" , color = "green")
+    
+
        email = request.form.get("email")
        password = request.form.get("password")
 
@@ -172,6 +179,15 @@ def login() :
             return resp
     
     else :
+       email = request.cookies.get("email")
+       registerKey = request.cookies.get("key")
+
+       if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+            return render_template("login.html", title = f"You are already logged in" , 
+                                   text = f"You are already logged in as {email}" ,
+                                     color = "green"  , logout = True
+                                   )
+    
        return render_template("login.html")
 
 
@@ -184,6 +200,18 @@ def login() :
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST" : 
+
+        email = request.cookies.get("email")
+        registerKey = request.cookies.get("key")
+
+        if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+                return render_template("login.html", title = f"You are already logged in" , 
+                                    text = f"You are already logged in as {email}" ,
+                                        color = "green"  , logout = True
+                                    )
+
+
+
         email = request.form.get("email")
         password = request.form.get("password")
 
@@ -208,6 +236,15 @@ def signup():
         
 
     else : 
+        email = request.cookies.get("email")
+        registerKey = request.cookies.get("key")
+
+        if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+            return render_template("signup.html", title = f"You are already logged in" , 
+                                   text = f"You are already logged in as {email}" ,
+                                     color = "green"  , logout = True
+                                   )
+        
         return render_template("signup.html")
     
 
@@ -271,6 +308,13 @@ def deleteLink(shortLink):
 
 @app.route("/qrcode/<string:shortUrl>")
 def qrcode(shortUrl):
+
+    email = request.cookies.get("email")
+    registerKey = request.cookies.get("key")
+
+    if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+        return render_template("login.html", title="Need to login", text="You need to login"), 401
+
     # url =      host_url      + shortUrl
     # url = https://example.com/ + example
     url = f"{request.host_url}{shortUrl}"
@@ -297,6 +341,12 @@ def qrcode(shortUrl):
 
 @app.route("/dqrcode/<string:shortUrl>")
 def downloadQrCode(shortUrl): 
+    email = request.cookies.get("email")
+    registerKey = request.cookies.get("key")
+
+    if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+        return render_template("login.html", title="Need to login", text="You need to login"), 401
+
     # url =      host_url      + shortUrl
     # url = https://example.com/ + example
     url = f"{request.host_url}{shortUrl}"
@@ -328,7 +378,17 @@ def profile() :
         return render_template("login.html", title="Need to login", text="You need to login to access to profile"), 401
 
     else : 
-        return render_template("profile.html")
+        return render_template("profile.html" , email = email)
+
+
+
+
+
+@app.route("/logout")
+def logout() : 
+    response = make_response(redirect(url_for("login")))
+    response.delete_cookie('key')
+    return response
 
 
 
