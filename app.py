@@ -1,23 +1,53 @@
 from flask import Flask , render_template , request , abort , redirect , url_for , send_file , make_response 
 
-#import socket for find local ip    
+#import socket for find local ip addr
 import socket
+
+# Import the io module to create an in-memory byte buffer for sending the QR code
 import io
-from modules import metricManager ,urlManager ,registerKeyManager ,mainPageMetric, userManager
+
+#import metricManager module for manage metrix like link views
+from modules import metricManager 
+
+#import urlManager module for add shortLink and fetch original link using shortLink
+from modules import urlManager 
+
+#import registerKeyManager for manage login cookies register keys and key validation
+from modules import registerKeyManager 
+
+#import mainPageMetric for show metrix in main page like as users , links , views counter
+from modules import mainPageMetric
+
+#import userManager for add user and check user validation
+from modules import userManager
+
+#import qrcodeManager for create qrcode , push them to redis and fetch them from memory
 from modules import qrcodeManager
+
+
 
 app = Flask(__name__)
 
 
 
+
+
 @app.before_request
 def before_request():
+    # Increment the view counter for all pages based on the visitor's IP address
     mainPageMetric.Views(request.remote_addr).addToViewsCounter()
  
  
 
+
+
+
 @app.route("/", methods=["GET", "POST"])
 def main():
+    """
+    main.html -> home page for all users before login
+    cmain.html -> dashboard page for all users after login
+    """
     email = request.cookies.get("email")
     registerKey = request.cookies.get("key")
 
@@ -62,6 +92,7 @@ def redirectPage(shortLink) :
     origin = urlManager.ShowUrlWithShortLink(shortLink).show()
 
     if origin : 
+        # add view for wanted link if exists
         metricManager.AddView(shortLink).addView()
         return redirect(origin)
     else : 
@@ -127,7 +158,15 @@ def login() :
             registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
             #redirect to home page after set cookies
             resp = make_response(redirect(url_for('main')))
-            #the expiration for cookies is 7 days
+            """
+            The expiration for cookies is 7 days or 168h
+
+            other times for expire time : 
+            24h(1 day) -> 60 * 60 * 24
+            48h(2 day) -> 60 * 60 * 24 * 2
+            72h(3 day) -> 60 * 60 * 24 * 3
+            96(4 day) -> 60 * 60 * 24 * 4
+            """
             resp.set_cookie('email', email , max_age=60*60*24*7)  
             resp.set_cookie('key', registerKey , max_age=60*60*24*7)  
             return resp
