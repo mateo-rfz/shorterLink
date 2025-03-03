@@ -236,11 +236,12 @@ def deleteLink(shortLink):
 
 @app.route("/qrcode/<string:shortUrl>")
 def qrcode(shortUrl):
+    # url =      host_url      + shortUrl
+    # url = https://example.com/ + example
     url = f"{request.host_url}{shortUrl}"
     print(url)
 
     cr = qrcodeManager.CreateQrCode(url).create()
-    print(cr)
 
     qr_data = qrcodeManager.fetchQrCode(url).fetch()
     
@@ -251,11 +252,18 @@ def qrcode(shortUrl):
         io.BytesIO(qr_data),
         mimetype='image/png',
         as_attachment=False,
-        download_name=f'{shortUrl}.png'
+        download_name=f'{url}.png'
     )
+
+
+
+
+
 
 @app.route("/dqrcode/<string:shortUrl>")
 def downloadQrCode(shortUrl): 
+    # url =      host_url      + shortUrl
+    # url = https://example.com/ + example
     url = f"{request.host_url}{shortUrl}"
 
     qrcodeManager.CreateQrCode(url).create()
@@ -269,7 +277,7 @@ def downloadQrCode(shortUrl):
         io.BytesIO(qr_data),
         mimetype='image/png',
         as_attachment=True,
-        download_name=f'{shortUrl}.png'
+        download_name=f'{url}.png'
     )
 
 
