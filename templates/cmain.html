@@ -14,8 +14,12 @@
             <nav class="flex space-x-3 sm:space-x-4 text-sm sm:text-base">
                 <a href="{{ url_for('createLink') }}" class="hover:text-gray-400">Create Link</a>
             </nav>
-            <span class="bg-gray-700 py-1 px-2 sm:py-1 sm:px-3 rounded text-xs sm:text-sm">{{ email }}</span>
-        </div>
+            <form action="{{ url_for('profile') }}" method="GET">
+                <button type="submit" class="bg-gray-700 py-1 px-2 sm:py-1 sm:px-3 rounded text-xs sm:text-sm hover:bg-gray-600">
+                    {{ email }}
+                </button>
+            </form>
+                    </div>
     </header>
     
     <!-- Main Content -->
