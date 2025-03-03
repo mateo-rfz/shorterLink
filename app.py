@@ -188,7 +188,7 @@ def signup():
         password = request.form.get("password")
 
         o = userManager.AddUser(email , password).adduser()
-        if o is True: 
+        if o == 300: 
             registerKey = registerKeyManager.AddRegisterKey(email).registerKey()
             #redirect to create link page after set cookies
             resp = make_response(redirect(url_for('createLink')))
@@ -197,12 +197,15 @@ def signup():
             resp.set_cookie('key', registerKey , max_age=60*60*24*7) 
             return resp
     
-        elif not o :
-            return render_template("signup.html" , title = "Error" , text = "An account with this email already exists.")
-        
+
         elif o == "WEAKPASS" : 
             return render_template("signup.html" , title = "Weak password" , text = "Your password is weak use Number and Letters")
 
+
+        elif not o :
+            return render_template("signup.html" , title = "Error" , text = "An account with this email already exists.")
+        
+        
 
     else : 
         return render_template("signup.html")
@@ -219,13 +222,19 @@ def resetPass() :
         email = request.cookies.get("email")
         registerKey = request.cookies.get("key")
 
-        if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+        if registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
             oldPassword = request.form.get("oldPassword")
             newPassword = request.form.get("newPassword")
+            
+            o = userManager.ChangeUserPassword(email , oldPassword , newPassword).changePass()
+            if o == "WEAKPASS" : 
+                return render_template("resetpass.html" , title = "Weak password" , text = "Your password is weak use Number and Letters")
+
+
             #set new register key for new login
             registerKeyManager.AddRegisterKey(email).registerKey()
 
-            userManager.ChangeUserPassword(email , oldPassword , newPassword).changePass()
+            return render_template("resetpass.html" , title = "Success" , text = "your password was changed" , color = "green")
 
         else : 
             return render_template("login.html", title = "Need to login" , text = "For change password you need to login first")
@@ -269,7 +278,7 @@ def qrcode(shortUrl):
 
     cr = qrcodeManager.CreateQrCode(url).create()
 
-    qr_data = qrcodeManager.fetchQrCode(url).fetch()
+    qr_data = qrcodeManager.FetchQrCode(url).fetch()
     
     if not qr_data:
         return abort(404, description="WE CANT FIND THIS QRCODE")
@@ -294,7 +303,7 @@ def downloadQrCode(shortUrl):
 
     qrcodeManager.CreateQrCode(url).create()
 
-    qr_data = qrcodeManager.fetchQrCode(url).fetch()
+    qr_data = qrcodeManager.FetchQrCode(url).fetch()
     
     if not qr_data:
         return abort(404, description="WE CANT FIND THIS QRCODE")
@@ -306,6 +315,20 @@ def downloadQrCode(shortUrl):
         download_name=f'{url}.png'
     )
 
+
+
+
+
+@app.route("/profile")
+def profile() : 
+    email = request.cookies.get("email")
+    registerKey = request.cookies.get("key")
+
+    if not registerKeyManager.KeyValidation(email , registerKey).checkValidation() :
+        return render_template("login.html", title="Need to login", text="You need to login to access to profile"), 401
+
+    else : 
+        return render_template("profile.html")
 
 
 

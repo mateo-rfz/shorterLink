@@ -131,7 +131,7 @@ class AddUser :
         if len(passwd) < 5 : 
             return "WEAKPASS"
         
-        numChecker = 0
+        numChecker = False
         letterChecker = False
 
         digits = (string.digits).replace("" , " ").split()
@@ -139,14 +139,14 @@ class AddUser :
 
         for char in passwd : 
             if char in digits : 
-                numChecker =+ 1
+                numChecker = True
             elif char in letters : 
                 letterChecker = True
 
-        if  numChecker and letterChecker > 4 :
-            return "WEAKPASS"
+        if letterChecker and numChecker :
+            return True
         else : 
-            return True 
+            return "WEAKPASS"
         
 
 
@@ -170,7 +170,7 @@ class AddUser :
             commit the data
             """
             
-            if not self.__passwordSecurityChecker(self.password) : 
+            if self.__passwordSecurityChecker(self.password) == "WEAKPASS": 
                 return "WEAKPASS"
             
             (self.conn).commit()
@@ -178,7 +178,7 @@ class AddUser :
 
             mainPageMetric.Users().addToUsersCounter()
 
-            return True
+            return 300
         except mysql.IntegrityError : 
             return False
         except Exception as e : 
@@ -284,6 +284,30 @@ class ChangeUserPassword :
 
     def __passHasher(self) : 
         return (sha256((self.newPassword).encode('utf-8')).hexdigest())
+    
+
+
+    def __passwordSecurityChecker(self , passwd : str) : 
+        passwd = passwd.replace(" " , "")
+        if len(passwd) < 5 : 
+            return "WEAKPASS"
+        
+        numChecker = False
+        letterChecker = False
+
+        digits = (string.digits).replace("" , " ").split()
+        letters = (string.ascii_letters).replace("" , " ").split()
+
+        for char in passwd : 
+            if char in digits : 
+                numChecker = True
+            elif char in letters : 
+                letterChecker = True
+
+        if letterChecker and numChecker :
+            return True
+        else : 
+            return "WEAKPASS"
         
 
 
@@ -291,6 +315,10 @@ class ChangeUserPassword :
     def __checkValidation(self) : 
         try : 
             o = CheckUserValidation(self.email , self.oldPassword).validationChecker()
+
+            if self.__passwordSecurityChecker(self.newPassword) == "WEAKPASS": 
+                return "WEAKPASS"
+            
             if o : 
                 cursor = (self.conn).cursor()
                 cursor.execute("""UPDATE users SET password = %s WHERE email = %s""" , (self.hashNewPassword , self.email,))
