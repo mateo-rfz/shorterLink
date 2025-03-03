@@ -284,7 +284,7 @@ def downloadQrCode(shortUrl):
 
 
 
-#main page api
+#main page api for policy and about and contactus
 @app.route("/policy" , methods = ["GET"])
 def policy() : 
     return render_template("policy.html")
@@ -308,4 +308,6 @@ def contactus() :
 
 
 if (__name__) == ("__main__") : 
-    app.run(host=socket.gethostbyname(socket.gethostname()) , port=80 , debug=True)
+    app.run(host=socket.gethostbyname(socket.gethostname()) ,
+             port=80 ,
+               debug=True)
